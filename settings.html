@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Settings - My Marketplace</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f6f6f6;
+            font-family: Arial, sans-serif;
+            color: #222;
+        }
+
+        .settings-page {
+            min-height: 100vh;
+            padding: 35px 20px 70px;
+        }
+
+        .settings-topbar {
+            width: min(1000px, 100%);
+            margin: 0 auto 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .settings-brand {
+            cursor: pointer;
+        }
+
+        .settings-brand-title {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 25px;
+            color: #171717;
+        }
+
+        .settings-brand-subtitle {
+            margin-top: 4px;
+            color: #888;
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+
+        .back-home {
+            height: 40px;
+            padding: 0 17px;
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: #fff;
+            color: #333;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .settings-wrapper {
+            width: min(1000px, 100%);
+            margin: 0 auto;
+        }
+
+        .settings-header {
+            margin-bottom: 25px;
+        }
+
+        .settings-header h1 {
+            margin: 0 0 7px;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 34px;
+            font-weight: 500;
+            color: #171717;
+        }
+
+        .settings-header p {
+            margin: 0;
+            color: #888;
+            font-size: 13px;
+        }
+
+        .settings-card {
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 28px rgba(0,0,0,.06);
+        }
+
+        .setting-row {
+            min-height: 76px;
+            padding: 17px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .setting-row:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .setting-icon {
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 11px;
+            background: #f5f2ee;
+            color: #725431;
+            font-size: 19px;
+        }
+
+        .setting-text h3 {
+            margin: 0 0 5px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #222;
+        }
+
+        .setting-text p {
+            margin: 0;
+            color: #999;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .setting-button {
+            min-width: 88px;
+            height: 36px;
+            padding: 0 14px;
+            border: 1px solid #ddd;
+            border-radius: 18px;
+            background: #fff;
+            color: #333;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .setting-button:hover {
+            border-color: #222;
+            background: #fafafa;
+        }
+
+        .toggle {
+            position: relative;
+            width: 46px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+
+        .toggle input {
+            display: none;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            background: #ddd;
+            cursor: pointer;
+            transition: .25s ease;
+        }
+
+        .toggle-slider::before {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 3px;
+            left: 3px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,.18);
+            transition: .25s ease;
+        }
+
+        .toggle input:checked + .toggle-slider {
+            background: #171717;
+        }
+
+        .toggle input:checked + .toggle-slider::before {
+            transform: translateX(20px);
+        }
+
+        .danger-row {
+            margin-top: 18px;
+            border: 1px solid #eadada;
+            border-radius: 16px;
+            background: #fff;
+        }
+
+        .danger-row .setting-icon {
+            background: #fff4f4;
+            color: #a23b3b;
+        }
+
+        .danger-button {
+            color: #a23b3b;
+            border-color: #e1caca;
+        }
+
+        .danger-button:hover {
+            background: #fff7f7;
+            border-color: #c98d8d;
+        }
+
+        .popup {
+            position: fixed;
+            top: 22px;
+            left: 50%;
+            transform: translate(-50%, -120px);
+            width: min(400px, calc(100% - 28px));
+            padding: 15px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 14px;
+            box-shadow: 0 14px 38px rgba(0,0,0,.16);
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: .35s ease;
+        }
+
+        .popup.show {
+            transform: translate(-50%, 0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-icon {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #171717;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .popup strong {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 13px;
+        }
+
+        .popup p {
+            margin: 0;
+            color: #777;
+            font-size: 11px;
+        }
+
+        @media (max-width: 600px) {
+
+            .settings-page {
+                padding: 22px 12px 50px;
+            }
+
+            .settings-brand-title {
+                font-size: 21px;
+            }
+
+            .settings-header h1 {
+                font-size: 30px;
+            }
+
+            .setting-row {
+                padding: 15px;
+                gap: 12px;
+            }
+
+            .setting-text p {
+                max-width: 190px;
+            }
+
+        }
+
+    </style>
+ <script src="logo.js"></script>
+</head>
+
+<body>
+
+    <main class="settings-page">
+
+        <div class="settings-topbar">
+
+           <div
+    class="settings-brand"
+    onclick="window.location.href='index.html'"
+>
+
+    <div class="premium-brand">
+
+        <img
+            src="./lotus-logo.png"
+            alt="My Marketplace"
+            class="premium-lotus"
+        >
+
+        <div class="premium-brand-text">
+
+            <div class="premium-name">
+
+                <span class="premium-my">
+                    My
+                </span>
+
+                <span class="premium-marketplace">
+                    Marketplace
+                </span>
+
+            </div>
+
+            <div class="premium-line"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+            <a
+                href="index.html"
+                class="back-home"
+            >
+                ← Home
+            </a>
+
+        </div>
+
+
+        <div class="settings-wrapper">
+
+            <div class="settings-header">
+
+                <h1>Settings</h1>
+
+                <p>
+                    Manage your My Marketplace preferences.
+                </p>
+
+            </div>
+
+
+            <div class="settings-card">
+
+                <div class="setting-row">
+
+                    <div class="setting-info">
+
+                        <div class="setting-icon">
+                            🔔
+                        </div>
+
+                        <div class="setting-text">
+
+                            <h3>Notifications</h3>
+
+                            <p>
+                                Receive updates about orders and services.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <label class="toggle">
+
+                        <input
+                            type="checkbox"
+                            id="notificationToggle"
+                            checked
+                            onchange="saveSetting('notifications', this.checked)"
+                        >
+
+                        <span class="toggle-slider"></span>
+
+                    </label>
+
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div class="setting-info">
+
+                        <div class="setting-icon">
+                            🌐
+                        </div>
+
+                        <div class="setting-text">
+
+                            <h3>Language</h3>
+
+                            <p id="languageText">
+                                English
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="setting-button"
+                        onclick="openLanguageSelector()"
+                    >
+                        Change
+                    </button>
+
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div class="setting-info">
+
+                        <div class="setting-icon">
+                            🛡
+                        </div>
+
+                        <div class="setting-text">
+
+                            <h3>Privacy</h3>
+
+                            <p>
+                                Manage your account information and preferences.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="setting-button"
+                        onclick="showSettingPopup('Privacy', 'Your account information is stored locally on this device.')"
+                    >
+                        View
+                    </button>
+
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div class="setting-info">
+
+                        <div class="setting-icon">
+                            🛒
+                        </div>
+
+                        <div class="setting-text">
+
+                            <h3>Shopping Preferences</h3>
+
+                            <p>
+                                Manage your saved shopping preferences.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="setting-button"
+                        onclick="window.location.href='wishlist.html'"
+                    >
+                        Saved Designs
+                    </button>
+
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div class="setting-info">
+
+                        <div class="setting-icon">
+                            📦
+                        </div>
+
+                        <div class="setting-text">
+
+                            <h3>Order History</h3>
+
+                            <p>
+                                View and manage your previous orders.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="setting-button"
+                        onclick="window.location.href='my-orders.html'"
+                    >
+                        My Orders
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="danger-row">
+
+                <div class="setting-row">
+
+                    <div class="setting-info">
+
+                        <div class="setting-icon">
+                            ♻
+                        </div>
+
+                        <div class="setting-text">
+
+                            <h3>Clear Local Data</h3>
+
+                            <p>
+                                Remove saved account and shopping data from this device.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="setting-button danger-button"
+                        onclick="clearData()"
+                    >
+                        Clear Data
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <div
+        class="popup"
+        id="settingPopup"
+    >
+
+        <div class="popup-icon">
+            ✓
+        </div>
+
+        <div>
+
+            <strong id="popupTitle">
+                Settings Updated
+            </strong>
+
+            <p id="popupMessage">
+                Your setting has been updated.
+            </p>
+
+        </div>
+
+    </div>
+    <script>
+
+        function showSettingPopup(title, message) {
+
+            const popup =
+                document.getElementById("settingPopup");
+
+            document.getElementById("popupTitle").innerText =
+                title;
+
+            document.getElementById("popupMessage").innerText =
+                message;
+
+            popup.classList.add("show");
+
+            setTimeout(function() {
+
+                popup.classList.remove("show");
+
+            }, 2800);
+        }
+
+
+        function saveSetting(name, value) {
+
+            localStorage.setItem(
+                "setting_" + name,
+                value
+            );
+
+            if (name === "notifications") {
+
+                showSettingPopup(
+                    value
+                        ? "Notifications Enabled"
+                        : "Notifications Disabled",
+                    value
+                        ? "You will receive order and service updates."
+                        : "Notifications have been turned off."
+                );
+
+            }
+
+        }
+
+
+        function loadSettings() {
+
+            const notifications =
+                localStorage.getItem(
+                    "setting_notifications"
+                );
+
+            const language =
+                localStorage.getItem(
+                    "setting_language"
+                );
+
+            if (notifications !== null) {
+
+                document.getElementById(
+                    "notificationToggle"
+                ).checked =
+                    notifications === "true";
+
+            }
+
+            if (language) {
+
+                document.getElementById(
+                    "languageText"
+                ).innerText =
+                    language;
+
+            }
+
+        }
+
+
+        function clearData() {
+
+            const confirmed =
+                confirm(
+                    "Clear saved account and shopping data from this device?"
+                );
+
+            if (!confirmed) {
+                return;
+            }
+
+            localStorage.removeItem(
+                "myMarketplaceAccount"
+            );
+
+            localStorage.removeItem(
+                "myMarketplaceAccountLoggedIn"
+            );
+
+            localStorage.removeItem(
+                "cart"
+            );
+
+            localStorage.removeItem(
+                "wishlist"
+            );
+
+            localStorage.removeItem(
+                "orders"
+            );
+
+            showSettingPopup(
+                "Data Cleared",
+                "Saved account and shopping data have been removed."
+            );
+
+        }
+
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function() {
+
+                loadSettings();
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>

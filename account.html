@@ -1,0 +1,2248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Account - My Marketplace</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f6f6f6;
+            font-family: Arial, sans-serif;
+            color: #222;
+        }
+
+        .account-page {
+            min-height: 100vh;
+            padding: 35px 20px 70px;
+        }
+
+        .account-topbar {
+            width: min(1100px, 100%);
+            margin: 0 auto 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .account-brand {
+            cursor: pointer;
+        }
+
+        .account-brand-title {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 25px;
+            color: #171717;
+        }
+
+        .account-brand-subtitle {
+            margin-top: 4px;
+            color: #888;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .home-link {
+            height: 40px;
+            padding: 0 17px;
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: #fff;
+            color: #333;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            transition: .2s ease;
+        }
+
+        .home-link:hover {
+            border-color: #222;
+            color: #111;
+            transform: translateY(-1px);
+        }
+
+        .account-wrapper {
+            width: min(1100px, 100%);
+            margin: 0 auto;
+        }
+
+        .account-card {
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 38% 62%;
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 20px;
+            box-shadow: 0 12px 40px rgba(0,0,0,.07);
+        }
+
+        .account-intro {
+            min-height: 610px;
+            padding: 55px 42px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: #171717;
+            color: #fff;
+        }
+
+        .intro-label {
+            margin-bottom: 18px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            color: #c9a875;
+        }
+
+        .account-intro h1 {
+            margin: 0 0 18px;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 42px;
+            line-height: 1.12;
+            font-weight: 400;
+        }
+
+        .account-intro p {
+            max-width: 330px;
+            margin: 0;
+            color: #cfcfcf;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .account-benefits {
+            margin-top: 35px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .benefit {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #ddd;
+            font-size: 13px;
+        }
+
+        .benefit-icon {
+            width: 34px;
+            height: 34px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #555;
+            border-radius: 50%;
+            color: #d2ad79;
+            font-size: 14px;
+        }
+
+        .account-content {
+            padding: 48px 52px;
+        }
+
+        .account-heading {
+            margin-bottom: 28px;
+        }
+
+        .account-heading h2 {
+            margin: 0 0 7px;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 30px;
+            font-weight: 500;
+            color: #171717;
+        }
+
+        .account-heading p {
+            margin: 0;
+            color: #888;
+            font-size: 13px;
+        }
+
+        .account-tabs {
+            display: flex;
+            gap: 7px;
+            margin-bottom: 28px;
+            padding: 5px;
+            border: 1px solid #e8e8e8;
+            border-radius: 10px;
+            background: #f7f7f7;
+        }
+
+        .account-tab {
+            flex: 1;
+            height: 40px;
+            border: none;
+            border-radius: 7px;
+            background: transparent;
+            color: #777;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .account-tab.active {
+            background: #171717;
+            color: #fff;
+            box-shadow: 0 3px 8px rgba(0,0,0,.12);
+        }
+
+        .account-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group label {
+            color: #333;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 15px;
+            border: 1px solid #ddd;
+            border-radius: 9px;
+            outline: none;
+            background: #fff;
+            color: #222;
+            font-size: 14px;
+            transition: .2s ease;
+        }
+
+        .form-input:focus {
+            border-color: #888;
+            box-shadow: 0 0 0 3px rgba(0,0,0,.04);
+        }
+
+        .password-input {
+            padding-right: 72px;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .show-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            height: 32px;
+            padding: 0 9px;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            color: #777;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .show-password:hover {
+            background: #f4f4f4;
+            color: #222;
+        }
+
+        .account-submit {
+            width: 100%;
+            height: 49px;
+            margin-top: 7px;
+            border: none;
+            border-radius: 9px;
+            background: #171717;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .25s ease;
+        }
+
+        .account-submit:hover {
+            background: #333;
+            transform: translateY(-1px);
+            box-shadow: 0 7px 18px rgba(0,0,0,.12);
+        }
+
+        .account-note {
+            margin: 17px 0 0;
+            text-align: center;
+            color: #999;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .account-section {
+            display: none;
+        }
+
+        .account-section.active {
+            display: block;
+        }
+
+        .profile-panel {
+            display: none;
+        }
+
+        .profile-panel.active {
+            display: block;
+        }
+
+        /* =========================================
+           PROFILE HEADER
+        ========================================= */
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px;
+            margin-bottom: 22px;
+            border: 1px solid #eadce2;
+            border-radius: 18px;
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #fff7fa
+                );
+            box-shadow:
+                0 6px 20px rgba(194,72,116,.08);
+        }
+
+        .profile-avatar {
+            width: 58px;
+            height: 58px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 17px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #f8c9d9,
+                    #d75b87
+                );
+
+            color: #fff;
+
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 22px;
+
+            box-shadow:
+                0 7px 18px rgba(205,75,120,.20);
+        }
+
+        .profile-header h3 {
+            margin: 0 0 5px;
+            font-size: 17px;
+            font-weight: 700;
+            color: #242124;
+        }
+
+        .profile-header p {
+            margin: 3px 0;
+            color: #888;
+            font-size: 12px;
+        }
+
+        .profile-email-empty {
+            color: #b05b78 !important;
+        }
+
+
+        /* =========================================
+           PREMIUM ACCOUNT MENU
+        ========================================= */
+
+        .account-premium-menu {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .account-premium-item {
+            position: relative;
+
+            width: 100%;
+            min-height: 78px;
+
+            display: flex;
+            align-items: center;
+
+            padding: 12px 15px 12px 12px;
+
+            border: 1px solid #efdce4;
+            border-radius: 19px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff 0%,
+                    #fffafd 55%,
+                    #fff3f7 100%
+                );
+
+            box-shadow:
+                0 5px 18px rgba(195,74,116,.08),
+                0 1px 3px rgba(0,0,0,.04);
+
+            cursor: pointer;
+            text-align: left;
+
+            transition:
+                transform .25s ease,
+                box-shadow .25s ease,
+                border-color .25s ease,
+                background .25s ease;
+
+            overflow: hidden;
+        }
+
+        .account-premium-item::before {
+            content: "";
+
+            position: absolute;
+            top: 0;
+            left: -130%;
+
+            width: 70%;
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255,255,255,.85),
+                    transparent
+                );
+
+            transform: skewX(-20deg);
+
+            transition: left .6s ease;
+
+            pointer-events: none;
+        }
+
+        .account-premium-item:hover::before {
+            left: 140%;
+        }
+
+        .account-premium-item:hover {
+            transform: translateY(-2px);
+
+            border-color: #e5aabd;
+
+            box-shadow:
+                0 11px 28px rgba(204,74,117,.15),
+                0 2px 6px rgba(0,0,0,.05);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #fff7fa,
+                    #ffedf4
+                );
+        }
+
+        .account-premium-item:active {
+            transform: scale(.985);
+        }
+
+
+        /* =========================================
+           PREMIUM STICKER
+        ========================================= */
+
+        .account-premium-sticker {
+            position: relative;
+
+            width: 51px;
+            height: 51px;
+            min-width: 51px;
+
+            margin-right: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 16px;
+
+            font-size: 23px;
+            font-weight: 700;
+
+            color: #c64b76;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #fff9fb,
+                    #f9d8e5
+                );
+
+            border: 1px solid #efc0d1;
+
+            box-shadow:
+                inset 0 1px 2px rgba(255,255,255,.95),
+                0 6px 14px rgba(203,74,117,.13);
+
+            transition:
+                transform .25s ease,
+                box-shadow .25s ease;
+        }
+
+        .account-premium-sticker::after {
+            content: "";
+
+            position: absolute;
+
+            width: 7px;
+            height: 7px;
+
+            top: 7px;
+            right: 7px;
+
+            border-radius: 50%;
+
+            background: #fff;
+
+            box-shadow:
+                0 0 8px rgba(255,255,255,.95);
+        }
+
+        .account-premium-item:hover
+        .account-premium-sticker {
+            transform: scale(1.07) rotate(-2deg);
+
+            box-shadow:
+                inset 0 1px 2px rgba(255,255,255,.95),
+                0 9px 20px rgba(203,74,117,.21);
+        }
+
+
+        /* =========================================
+           INDIVIDUAL STICKER COLORS
+        ========================================= */
+
+        .order-sticker {
+            color: #c94d79;
+        }
+
+        .address-sticker {
+            color: #a84f72;
+            font-size: 27px;
+        }
+
+        .profile-sticker {
+            color: #b54470;
+        }
+
+        .wallet-sticker {
+            color: #9f5a76;
+        }
+
+        .saved-sticker {
+            color: #d0527d;
+            font-size: 29px;
+        }
+
+        .help-sticker {
+            color: #9b5673;
+        }
+
+        .settings-sticker {
+            color: #8f4f6b;
+        }
+
+
+        /* =========================================
+           ACCOUNT MENU TEXT
+        ========================================= */
+
+        .account-premium-content {
+            min-width: 0;
+            flex: 1;
+
+            display: flex;
+            flex-direction: column;
+
+            gap: 4px;
+        }
+
+        .account-premium-content strong {
+            color: #242124;
+
+            font-size: 16px;
+            font-weight: 700;
+
+            line-height: 1.2;
+        }
+
+        .account-premium-content small {
+            color: #8a7d83;
+
+            font-size: 12px;
+            font-weight: 500;
+
+            line-height: 1.3;
+        }
+
+
+        /* =========================================
+           ARROW
+        ========================================= */
+
+        .account-premium-arrow {
+            width: 35px;
+            height: 35px;
+            min-width: 35px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-left: 8px;
+
+            border-radius: 11px;
+
+            background: #fff1f6;
+            color: #c94d79;
+
+            border: 1px solid #f1d2de;
+
+            font-size: 25px;
+            font-weight: 400;
+
+            line-height: 1;
+
+            transition:
+                transform .25s ease,
+                background .25s ease;
+        }
+
+        .account-premium-item:hover
+        .account-premium-arrow {
+            transform: translateX(3px);
+            background: #f8d3e1;
+        }
+
+
+        /* =========================================
+           OLD PROFILE ACTIONS
+           ========================================= */
+
+        .profile-actions {
+            display: none;
+        }
+
+
+        /* =========================================
+           SUCCESS / ERROR POPUPS
+        ========================================= */
+
+        .success-popup,
+        .error-popup {
+            position: fixed;
+
+            top: 22px;
+            left: 50%;
+
+            transform: translate(-50%, -130px);
+
+            width: min(410px, calc(100% - 28px));
+
+            padding: 15px 18px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+
+            border-radius: 14px;
+
+            background: rgba(255,255,255,.98);
+
+            border: 1px solid #e5e5e5;
+
+            box-shadow:
+                0 14px 40px rgba(0,0,0,.17);
+
+            z-index: 99999;
+
+            opacity: 0;
+            visibility: hidden;
+
+            transition: .35s ease;
+        }
+
+        .success-popup.show,
+        .error-popup.show {
+            transform: translate(-50%, 0);
+
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-icon {
+            width: 40px;
+            height: 40px;
+
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #171717;
+
+            color: #fff;
+
+            font-size: 19px;
+            font-weight: 700;
+        }
+
+        .error-popup .popup-icon {
+            background: #a53a3a;
+        }
+
+        .popup-text strong {
+            display: block;
+
+            margin-bottom: 3px;
+
+            color: #171717;
+
+            font-size: 13px;
+        }
+
+        .popup-text p {
+            margin: 0;
+
+            color: #777;
+
+            font-size: 11px;
+
+            line-height: 1.4;
+        }
+
+
+        /* =========================================
+           TABLET
+        ========================================= */
+
+        @media (max-width: 800px) {
+
+            .account-card {
+                grid-template-columns: 1fr;
+            }
+
+            .account-intro {
+                min-height: auto;
+                padding: 35px 30px;
+            }
+
+            .account-intro h1 {
+                font-size: 34px;
+            }
+
+            .account-content {
+                padding: 35px 28px;
+            }
+
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 520px) {
+
+            .account-page {
+                padding: 20px 12px 50px;
+            }
+
+            .account-topbar {
+                margin-bottom: 18px;
+            }
+
+            .account-brand-title {
+                font-size: 21px;
+            }
+
+            .account-brand-subtitle {
+                font-size: 9px;
+            }
+
+            .home-link {
+                height: 36px;
+                padding: 0 12px;
+                font-size: 11px;
+            }
+
+            .account-intro {
+                padding: 30px 23px;
+            }
+
+            .account-intro h1 {
+                font-size: 30px;
+            }
+
+            .account-intro p {
+                font-size: 13px;
+            }
+
+            .account-content {
+                padding: 28px 20px;
+            }
+
+            .account-heading h2 {
+                font-size: 27px;
+            }
+
+            .profile-header {
+                padding: 14px;
+                border-radius: 16px;
+            }
+
+            .profile-avatar {
+                width: 52px;
+                height: 52px;
+                min-width: 52px;
+            }
+
+            .account-premium-menu {
+                gap: 10px;
+                margin-top: 5px;
+            }
+
+            .account-premium-item {
+                min-height: 74px;
+
+                padding: 10px 11px 10px 10px;
+
+                border-radius: 17px;
+            }
+
+            .account-premium-sticker {
+                width: 46px;
+                height: 46px;
+                min-width: 46px;
+
+                margin-right: 11px;
+
+                border-radius: 14px;
+
+                font-size: 21px;
+            }
+
+            .account-premium-content strong {
+                font-size: 14px;
+            }
+
+            .account-premium-content small {
+                font-size: 10.5px;
+            }
+
+            .account-premium-arrow {
+                width: 31px;
+                height: 31px;
+                min-width: 31px;
+
+                border-radius: 9px;
+
+                font-size: 22px;
+            }
+
+            .success-popup,
+            .error-popup {
+                top: 14px;
+            }
+
+        }
+
+
+        /* =========================================
+           SMALL PHONES
+        ========================================= */
+
+        @media (max-width: 380px) {
+
+            .account-premium-item {
+                min-height: 69px;
+                padding: 9px;
+                border-radius: 15px;
+            }
+
+            .account-premium-sticker {
+                width: 42px;
+                height: 42px;
+                min-width: 42px;
+
+                margin-right: 9px;
+
+                border-radius: 12px;
+
+                font-size: 19px;
+            }
+
+            .account-premium-content strong {
+                font-size: 13px;
+            }
+
+            .account-premium-content small {
+                font-size: 9.5px;
+            }
+
+            .account-premium-arrow {
+                width: 28px;
+                height: 28px;
+                min-width: 28px;
+
+                font-size: 21px;
+            }
+
+        }
+
+    </style>
+ <script src="logo.js"></script>
+</head>
+
+
+<body>
+
+    <main class="account-page">
+
+
+        <div class="account-topbar">
+
+            <div
+    class="account-brand"
+    onclick="goHome()"
+    style="cursor:pointer;"
+>
+
+    <div class="premium-brand">
+
+        <img
+            src="./lotus-logo.png"
+            alt="My Marketplace"
+            class="premium-lotus"
+        >
+
+        <div class="premium-brand-text">
+
+            <div class="premium-name">
+
+                <span class="premium-my">
+                    My
+                </span>
+
+                <span class="premium-marketplace">
+                    Marketplace
+                </span>
+
+            </div>
+
+            <div class="premium-line"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+        <div class="account-wrapper">
+
+            <div class="account-card">
+
+
+                <!-- RIGHT CONTENT -->
+
+                <section class="account-content">
+
+
+                    <div class="account-heading">
+
+                        <h2 id="accountTitle">
+                            Create Your Account
+                        </h2>
+
+                        <p id="accountSubtitle">
+                            Join My Marketplace in a few simple steps. 
+                        </p>
+
+
+                      <!-- TABS -->
+
+                    <div
+                        class="account-tabs"
+                        id="accountTabs"
+                    >
+
+                        <button
+                            class="account-tab active"
+                            id="signupTab"
+                            onclick="showSignup()"
+                        >
+                            Create Account
+                        </button>
+
+
+                        <button
+                            class="account-tab"
+                            id="loginTab"
+                            onclick="showLogin()"
+                        >
+                            Login
+                        </button>
+
+                    </div>
+
+
+                    <!-- CREATE ACCOUNT -->
+
+                    <div
+                        class="account-section active"
+                        id="signupSection"
+                    >
+
+                        <form
+                            class="account-form"
+                            onsubmit="createAccount(event)"
+                        >
+
+                            <div class="form-group">
+
+                                <label for="accountName">
+                                    Full Name
+                                </label>
+
+                                <input
+                                    class="form-input"
+                                    type="text"
+                                    id="accountName"
+                                    placeholder="Enter your full name"
+                                    autocomplete="name"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="accountPhone">
+                                    Mobile Number
+                                </label>
+
+                                <input
+                                    class="form-input"
+                                    type="tel"
+                                    id="accountPhone"
+                                    placeholder="Enter 10-digit mobile number"
+                                    maxlength="10"
+                                    inputmode="numeric"
+                                    autocomplete="tel"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="accountPassword">
+                                    Create Password
+                                </label>
+
+                                <div class="input-wrap">
+
+                                    <input
+                                        class="form-input password-input"
+                                        type="password"
+                                        id="accountPassword"
+                                        placeholder="Minimum 6 characters"
+                                        minlength="6"
+                                        autocomplete="new-password"
+                                        required
+                                    >
+
+                                    <button
+                                        type="button"
+                                        class="show-password"
+                                        onclick="togglePassword(
+                                            'accountPassword',
+                                            this
+                                        )"
+                                    >
+                                        Show
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                class="account-submit"
+                                type="submit"
+                            >
+                                Create Account
+                            </button>
+
+                        </form>
+
+
+                        <p class="account-note">
+                            You can add or update your email later
+                            from your profile settings.
+                        </p>
+
+                    </div>
+
+
+                    <!-- LOGIN -->
+
+                    <div
+                        class="account-section"
+                        id="loginSection"
+                    >
+
+                        <form
+                            class="account-form"
+                            onsubmit="loginAccount(event)"
+                        >
+
+                            <div class="form-group">
+
+                                <label for="loginPhone">
+                                    Mobile Number
+                                </label>
+
+                                <input
+                                    class="form-input"
+                                    type="tel"
+                                    id="loginPhone"
+                                    placeholder="Enter 10-digit mobile number"
+                                    maxlength="10"
+                                    inputmode="numeric"
+                                    autocomplete="tel"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="loginPassword">
+                                    Password
+                                </label>
+
+                                <div class="input-wrap">
+
+                                    <input
+                                        class="form-input password-input"
+                                        type="password"
+                                        id="loginPassword"
+                                        placeholder="Enter your password"
+                                        autocomplete="current-password"
+                                        required
+                                    >
+
+                                    <button
+                                        type="button"
+                                        class="show-password"
+                                        onclick="togglePassword(
+                                            'loginPassword',
+                                            this
+                                        )"
+                                    >
+                                        Show
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                class="account-submit"
+                                type="submit"
+                            >
+                                Login to Account
+                            </button>
+
+                        </form>
+
+
+                        <p class="account-note">
+                            Login securely using your mobile number
+                            and password.
+                        </p>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         PROFILE AFTER LOGIN
+                    ========================================== -->
+
+                    <div
+                        class="profile-panel"
+                        id="profilePanel"
+                    >
+
+
+                        <div class="profile-header">
+
+                            <div
+                                class="profile-avatar"
+                                id="profileAvatar"
+                            >
+                                U
+                            </div>
+
+
+                            <div>
+
+                                <h3 id="profileName">
+                                    My Account
+                                </h3>
+
+
+                                <p id="profilePhone"></p>
+
+
+                                <p
+                                    id="profileEmail"
+                                    class="profile-email-empty"
+                                >
+                                    Email can be added from Settings
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =====================================
+                             PREMIUM ACCOUNT BUTTONS
+                        ====================================== -->
+
+                        <div class="account-premium-menu">
+
+
+                            <!-- MY ORDERS -->
+
+                            <button
+                                class="account-premium-item"
+                                onclick="window.location.href='my-orders.html'"
+                            >
+
+                                <span
+                                    class="account-premium-sticker order-sticker"
+                                >
+                                    🛍️
+                                </span>
+
+
+                                <span class="account-premium-content">
+
+                                    <strong>
+                                        My Orders
+                                    </strong>
+
+                                    <small>
+                                        View and track your orders
+                                    </small>
+
+                                </span>
+
+
+                                <span class="account-premium-arrow">
+                                    ›
+                                </span>
+
+                            </button>
+
+
+                            <!-- MY ADDRESS -->
+
+                            <button
+                                class="account-premium-item"
+                                onclick="window.location.href='settings.html'"
+                            >
+
+                                <span
+                                    class="account-premium-sticker address-sticker"
+                                >
+                                    ⌖
+                                </span>
+
+
+                                <span class="account-premium-content">
+
+                                    <strong>
+                                        My Address
+                                    </strong>
+
+                                    <small>
+                                        Manage your delivery address
+                                    </small>
+
+                                </span>
+
+
+                                <span class="account-premium-arrow">
+                                    ›
+                                </span>
+
+                            </button>
+
+
+                            <!-- PROFILE DETAILS -->
+
+                            <button
+                                class="account-premium-item"
+                                onclick="openProfileSettings()"
+                            >
+
+                                <span
+                                    class="account-premium-sticker profile-sticker"
+                                >
+                                    ✦
+                                </span>
+
+
+                                <span class="account-premium-content">
+
+                                    <strong>
+                                        Profile Details
+                                    </strong>
+
+                                    <small>
+                                        Manage your personal details
+                                    </small>
+
+                                </span>
+
+
+                                <span class="account-premium-arrow">
+                                    ›
+                                </span>
+
+                            </button>
+
+
+                            <!-- WALLET -->
+
+                            <button
+                                class="account-premium-item"
+                                onclick="showWalletMessage()"
+                            >
+
+                                <span
+                                    class="account-premium-sticker wallet-sticker"
+                                >
+                                    ◈
+                                </span>
+
+
+                                <span class="account-premium-content">
+
+                                    <strong>
+                                        My Wallet
+                                    </strong>
+
+                                    <small>
+                                        Wallet balance and transactions
+                                    </small>
+
+                                </span>
+
+
+                                <span class="account-premium-arrow">
+                                    ›
+                                </span>
+
+                            </button>
+
+
+                            <!-- SAVED DESIGNS -->
+
+                            <button
+                                class="account-premium-item"
+                                onclick="window.location.href='wishlist.html'"
+                            >
+
+                                <span
+                                    class="account-premium-sticker saved-sticker"
+                                >
+                                    ♡
+                                </span>
+
+
+                                <span class="account-premium-content">
+
+                                    <strong>
+                                        Saved Designs
+                                    </strong>
+
+                                    <small>
+                                        Your favourite designs and products
+                                    </small>
+
+                                </span>
+
+
+                                <span class="account-premium-arrow">
+                                    ›
+                                </span>
+
+                            </button>
+
+
+                            <!-- HELP & SUPPORT -->
+
+                            <button
+                                class="account-premium-item"
+                                onclick="openHelpSupport()"
+                            >
+
+                                <span
+                                    class="account-premium-sticker help-sticker"
+                                >
+                                    ?
+                                </span>
+
+
+                                <span class="account-premium-content">
+
+                                    <strong>
+                                        Help &amp; Support
+                                    </strong>
+
+                                    <small>
+                                        Get help with your account and orders
+                                    </small>
+
+                                </span>
+
+
+                                <span class="account-premium-arrow">
+                                    ›
+                                </span>
+
+                            </button>
+
+
+                            <!-- SETTINGS -->
+
+                            <button
+                                class="account-premium-item"
+                                onclick="window.location.href='settings.html'"
+                            >
+
+                                <span
+                                    class="account-premium-sticker settings-sticker"
+                                >
+                                    ⚙
+                                </span>
+
+
+                                <span class="account-premium-content">
+
+                                    <strong>
+                                        Settings
+                                    </strong>
+
+                                    <small>
+                                        Manage your account preferences
+                                    </small>
+
+                                </span>
+
+
+                                <span class="account-premium-arrow">
+                                    ›
+                                </span>
+
+                            </button>
+
+
+                            <!-- LOGOUT -->
+
+                            <button
+                                class="account-premium-item logout-premium-button"
+                                onclick="logoutAccount()"
+                            >
+
+                                <span
+                                    class="account-premium-sticker logout-sticker"
+                                >
+                                    ⇥
+                                </span>
+
+
+                                <span class="account-premium-content">
+
+                                    <strong>
+                                        Logout
+                                    </strong>
+
+                                    <small>
+                                        Sign out of your account
+                                    </small>
+
+                                </span>
+
+
+                                <span class="account-premium-arrow">
+                                    ›
+                                </span>
+
+                            </button>
+
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- SUCCESS POPUP -->
+
+    <div
+        class="success-popup"
+        id="successPopup"
+    >
+
+        <div class="popup-icon">
+            ✓
+        </div>
+
+
+        <div class="popup-text">
+
+            <strong id="successTitle">
+                Account Created Successfully
+            </strong>
+
+
+            <p id="successMessage">
+                Your account has been created successfully.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ERROR POPUP -->
+
+    <div
+        class="error-popup"
+        id="errorPopup"
+    >
+
+        <div class="popup-icon">
+            !
+        </div>
+
+
+        <div class="popup-text">
+
+            <strong id="errorTitle">
+                Login Failed
+            </strong>
+
+
+            <p id="errorMessage">
+                Please check your details.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+
+        /* =========================================
+           SIGNUP
+        ========================================= */
+
+        function showSignup() {
+
+            document
+                .getElementById("signupSection")
+                .classList.add("active");
+
+            document
+                .getElementById("loginSection")
+                .classList.remove("active");
+
+            document
+                .getElementById("signupTab")
+                .classList.add("active");
+
+            document
+                .getElementById("loginTab")
+                .classList.remove("active");
+
+            document
+                .getElementById("accountTitle")
+                .innerText = "Create Your Account";
+
+            document
+                .getElementById("accountSubtitle")
+                .innerText =
+                "Join My Marketplace in a few simple steps.";
+
+        }
+
+
+        /* =========================================
+           LOGIN TAB
+        ========================================= */
+
+        function showLogin() {
+
+            document
+                .getElementById("signupSection")
+                .classList.remove("active");
+
+            document
+                .getElementById("loginSection")
+                .classList.add("active");
+
+            document
+                .getElementById("signupTab")
+                .classList.remove("active");
+
+            document
+                .getElementById("loginTab")
+                .classList.add("active");
+
+            document
+                .getElementById("accountTitle")
+                .innerText = "Welcome Back";
+
+            document
+                .getElementById("accountSubtitle")
+                .innerText =
+                "Login to manage your My Marketplace account.";
+
+        }
+
+
+        /* =========================================
+           SHOW / HIDE PASSWORD
+        ========================================= */
+
+        function togglePassword(inputId, button) {
+
+            const input =
+                document.getElementById(inputId);
+
+
+            if (input.type === "password") {
+
+                input.type = "text";
+
+                button.innerText = "Hide";
+
+            } else {
+
+                input.type = "password";
+
+                button.innerText = "Show";
+
+            }
+
+        }
+
+
+        /* =========================================
+           CREATE ACCOUNT
+        ========================================= */
+
+        function createAccount(event) {
+
+            event.preventDefault();
+
+
+            const name =
+                document
+                    .getElementById("accountName")
+                    .value
+                    .trim();
+
+
+            const phone =
+                document
+                    .getElementById("accountPhone")
+                    .value
+                    .trim();
+
+
+            const password =
+                document
+                    .getElementById("accountPassword")
+                    .value;
+
+
+            if (!/^[0-9]{10}$/.test(phone)) {
+
+                showError(
+                    "Invalid Mobile Number",
+                    "Please enter a valid 10-digit mobile number."
+                );
+
+                return;
+
+            }
+
+
+            if (password.length < 6) {
+
+                showError(
+                    "Password Too Short",
+                    "Password must contain at least 6 characters."
+                );
+
+                return;
+
+            }
+
+
+            let existingAccount = null;
+
+            try {
+                const rawAccount = localStorage.getItem(
+                    "myMarketplaceAccount"
+                );
+
+                existingAccount = rawAccount
+                    ? JSON.parse(rawAccount)
+                    : null;
+
+            } catch (error) {
+                existingAccount = null;
+            }
+
+
+            const account = {
+
+                name: name,
+
+                phone: phone,
+
+                email:
+                    existingAccount &&
+                    existingAccount.email
+                        ? existingAccount.email
+                        : "",
+
+                password: password,
+
+                createdAt:
+                    existingAccount &&
+                    existingAccount.createdAt
+                        ? existingAccount.createdAt
+                        : new Date().toISOString()
+
+            };
+
+
+            localStorage.setItem(
+                "myMarketplaceAccount",
+                JSON.stringify(account)
+            );
+
+            localStorage.setItem(
+                "myMarketplaceAccountLoggedIn",
+                "true"
+            );
+
+            localStorage.removeItem(
+                "myMarketplaceLastOrderPhone"
+            );
+
+
+            showSuccess(
+                "Account Created Successfully",
+                "Welcome to My Marketplace, " + name + "."
+            );
+
+
+            setTimeout(function() {
+
+                showProfile();
+
+            }, 1200);
+
+        }
+
+
+        /* =========================================
+           LOGIN
+        ========================================= */
+
+        function loginAccount(event) {
+
+            event.preventDefault();
+
+
+            const phone =
+                document
+                    .getElementById("loginPhone")
+                    .value
+                    .trim();
+
+
+            const password =
+                document
+                    .getElementById("loginPassword")
+                    .value;
+
+
+            if (!/^[0-9]{10}$/.test(phone)) {
+
+                showError(
+                    "Invalid Mobile Number",
+                    "Please enter a valid 10-digit mobile number."
+                );
+
+                return;
+
+            }
+
+
+            let savedAccount = null;
+
+            try {
+                const rawAccount = localStorage.getItem(
+                    "myMarketplaceAccount"
+                );
+
+                savedAccount = rawAccount
+                    ? JSON.parse(rawAccount)
+                    : null;
+
+            } catch (error) {
+                savedAccount = null;
+            }
+
+
+            if (!savedAccount) {
+
+                showError(
+                    "Account Not Found",
+                    "Please create an account first."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                phone === savedAccount.phone &&
+                password === savedAccount.password
+            ) {
+
+                localStorage.setItem(
+                    "myMarketplaceAccountLoggedIn",
+                    "true"
+                );
+
+                localStorage.removeItem(
+                    "myMarketplaceLastOrderPhone"
+                );
+
+                showSuccess(
+                    "Login Successful",
+                    "Welcome back, " +
+                    savedAccount.name +
+                    "."
+                );
+
+
+                setTimeout(function() {
+
+                    showProfile();
+
+                }, 900);
+
+            } else {
+
+                showError(
+                    "Login Failed",
+                    "Mobile number or password is incorrect."
+                );
+
+            }
+
+        }
+
+
+        /* =========================================
+           SHOW PROFILE
+        ========================================= */
+
+        function showProfile() {
+
+            let savedAccount = null;
+
+            try {
+                const rawAccount = localStorage.getItem(
+                    "myMarketplaceAccount"
+                );
+
+                savedAccount = rawAccount
+                    ? JSON.parse(rawAccount)
+                    : null;
+
+            } catch (error) {
+                savedAccount = null;
+            }
+
+
+            if (!savedAccount) {
+
+                showSignup();
+
+                return;
+
+            }
+
+            if (
+                localStorage.getItem(
+                    "myMarketplaceAccountLoggedIn"
+                ) === "false"
+            ) {
+
+                showLogin();
+
+                return;
+
+            }
+
+
+            document
+                .getElementById("signupSection")
+                .classList.remove("active");
+
+
+            document
+                .getElementById("loginSection")
+                .classList.remove("active");
+
+
+            document
+                .getElementById("accountTabs")
+                .style.display = "none";
+
+
+            document
+                .getElementById("accountTitle")
+                .innerText = "My Account";
+
+
+            document
+                .getElementById("accountSubtitle")
+                .innerText =
+                "Manage your My Marketplace account.";
+
+
+            document
+                .getElementById("profilePanel")
+                .classList.add("active");
+
+
+            document
+                .getElementById("profileName")
+                .innerText =
+                savedAccount.name;
+
+
+            document
+                .getElementById("profilePhone")
+                .innerText =
+                "Mobile: " + savedAccount.phone;
+
+
+            const emailElement =
+                document.getElementById(
+                    "profileEmail"
+                );
+
+
+            if (
+                savedAccount.email &&
+                savedAccount.email.trim() !== ""
+            ) {
+
+                emailElement.innerText =
+                    "Email: " + savedAccount.email;
+
+                emailElement.classList.remove(
+                    "profile-email-empty"
+                );
+
+            } else {
+
+                emailElement.innerText =
+                    "Email can be added from Settings";
+
+                emailElement.classList.add(
+                    "profile-email-empty"
+                );
+
+            }
+
+
+            const firstLetter =
+                savedAccount.name
+                    .charAt(0)
+                    .toUpperCase();
+
+
+            document
+                .getElementById("profileAvatar")
+                .innerText =
+                firstLetter;
+
+        }
+
+
+        /* =========================================
+           PROFILE SETTINGS
+        ========================================= */
+
+        function openProfileSettings() {
+
+            window.location.href =
+                "settings.html";
+
+        }
+
+
+        /* =========================================
+           WALLET
+        ========================================= */
+
+        function showWalletMessage() {
+
+            showSuccess(
+                "My Wallet",
+                "Your wallet balance and credits will appear here when available."
+            );
+
+        }
+
+
+        /* =========================================
+           HELP
+        ========================================= */
+
+        function showHelpMessage() {
+            openHelpSupport();
+
+        }
+
+
+        /* =========================================
+           LOGOUT
+        ========================================= */
+
+        function logoutAccount() {
+
+            localStorage.setItem(
+                "myMarketplaceAccountLoggedIn",
+                "false"
+            );
+
+            localStorage.removeItem(
+                "myMarketplaceLastOrderPhone"
+            );
+
+
+            showSuccess(
+                "Logged Out",
+                "You have been logged out successfully."
+            );
+
+
+            setTimeout(function() {
+
+                window.location.href =
+                    "index.html";
+
+            }, 1000);
+
+        }
+
+
+        /* =========================================
+           SUCCESS POPUP
+        ========================================= */
+
+        function showSuccess(title, message) {
+
+            const popup =
+                document.getElementById(
+                    "successPopup"
+                );
+
+
+            document
+                .getElementById("successTitle")
+                .innerText =
+                title;
+
+
+            document
+                .getElementById("successMessage")
+                .innerText =
+                message;
+
+
+            popup.classList.add("show");
+
+
+            setTimeout(function() {
+
+                popup.classList.remove("show");
+
+            }, 2500);
+
+        }
+
+
+        /* =========================================
+           ERROR POPUP
+        ========================================= */
+
+        function showError(title, message) {
+
+            const popup =
+                document.getElementById(
+                    "errorPopup"
+                );
+
+
+            document
+                .getElementById("errorTitle")
+                .innerText =
+                title;
+
+
+            document
+                .getElementById("errorMessage")
+                .innerText =
+                message;
+
+
+            popup.classList.add("show");
+
+
+            setTimeout(function() {
+
+                popup.classList.remove("show");
+
+            }, 3000);
+
+        }
+
+
+        /* =========================================
+           AUTO SHOW PROFILE
+        ========================================= */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function() {
+
+                try {
+                    const savedAccount =
+                        localStorage.getItem(
+                            "myMarketplaceAccount"
+                        );
+
+                    if (savedAccount) {
+                        const parsedAccount = JSON.parse(savedAccount);
+
+                        if (parsedAccount) {
+                            if (
+                                localStorage.getItem(
+                                    "myMarketplaceAccountLoggedIn"
+                                ) === "false"
+                            ) {
+                                showLogin();
+                            } else {
+                                showProfile();
+                            }
+                        }
+                    }
+
+                } catch (error) {
+                    // Ignore malformed saved account data.
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

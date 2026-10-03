@@ -1,0 +1,16 @@
+{
+  "name": "my-marketplace",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server/server.js",
+    "migrate:data": "node server/migrate-json-to-neon.js",
+    "verify:data": "node server/verify-neon-migration.js"
+  },
+  "dependencies": {
+    "pg": "^8.16.3"
+  }
+}

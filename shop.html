@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop | My Marketplace</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="logo" onclick="window.location.href='index.html'" aria-label="Go to home page"></div>
+            <nav class="main-nav">
+                <a href="index.html">Home</a>
+                <a href="shop.html" class="active">Shop</a>
+                <a href="wishlist.html">Saved</a>
+                <a href="my-orders.html">Orders</a>
+                <a href="account.html">Account</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="shop-hero">
+            <div class="shop-hero-content">
+                <p class="eyebrow">CURATED CATALOG</p>
+                <h1>All Products</h1>
+                <p>Explore the complete marketplace catalog with search, filters, category browsing and sorting.</p>
+            </div>
+        </section>
+
+        <section class="section" id="shop-catalog-section">
+            <div class="marketplace-filters" aria-label="Shop filters">
+                <input id="advancedSearch" type="search" placeholder="Search all products">
+                <select id="filterCategory"><option value="">All categories</option></select>
+                <select id="filterCondition"><option value="">Any condition</option><option>New</option><option>Like New</option><option>Used - Excellent</option><option>Used - Good</option><option>Used - Fair</option><option>Refurbished</option></select>
+                <select id="filterAvailability"><option value="">All stock</option><option value="available">Available</option><option value="out">Out of stock</option></select>
+                <select id="filterRating"><option value="0">Any rating</option><option value="4">4+ stars</option><option value="3">3+ stars</option><option value="2">2+ stars</option></select>
+                <select id="filterOffer"><option value="">Any offer</option><option value="specialOffer">Special Offer</option><option value="featured">Featured</option><option value="bestSeller">Best Seller</option></select>
+                <select id="filterSort"><option value="newest">Newest</option><option value="low">Price low to high</option><option value="high">Price high to low</option><option value="rating">Top rated</option></select>
+            </div>
+
+            <div id="shopResultsMeta" class="shop-results-meta"></div>
+            <div id="shopProducts" class="product-grid shop-product-grid"></div>
+            <div id="shopPagination" class="shop-pagination" aria-label="Catalog pagination"></div>
+        </section>
+    </main>
+
+    <script src="logo.js"></script>
+    <script src="script.js"></script>
+    <script>
+        const shopState = {
+            products: [],
+            currentPage: 1,
+            pageSize: 12,
+            filters: {}
+        };
+
+        function renderShopPagination(totalItems) {
+            const pager = document.getElementById("shopPagination");
+            if (!pager) return;
+
+            const totalPages = Math.max(1, Math.ceil(totalItems / shopState.pageSize));
+            if (shopState.currentPage > totalPages) {
+                shopState.currentPage = totalPages;
+            }
+
+            const pages = [];
+            for (let page = 1; page <= totalPages; page += 1) {
+                pages.push(page);
+            }
+
+            const buttons = [];
+            buttons.push(`<button type="button" data-page="prev" ${shopState.currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+            pages.forEach(page => {
+                buttons.push(`<button type="button" class="${page === shopState.currentPage ? 'active' : ''}" data-page="${page}">${page}</button>`);
+            });
+            buttons.push(`<button type="button" data-page="next" ${shopState.currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+
+            pager.innerHTML = buttons.join("");
+            pager.querySelectorAll("button[data-page]").forEach(button => {
+                button.addEventListener("click", function () {
+                    const nextPage = this.dataset.page;
+                    if (nextPage === "prev") {
+                        shopState.currentPage = Math.max(1, shopState.currentPage - 1);
+                    } else if (nextPage === "next") {
+                        shopState.currentPage = Math.min(totalPages, shopState.currentPage + 1);
+                    } else {
+                        shopState.currentPage = Number(nextPage) || 1;
+                    }
+                    applyShopFilters();
+                });
+            });
+        }
+
+        function escapeHTML(value) {
+            return String(value ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        function toNumber(value) {
+            const parsed = Number(value);
+            return Number.isFinite(parsed) ? parsed : 0;
+        }
+
+        function getProductImage(product) {
+            if (Array.isArray(product.images) && product.images.length > 0 && product.images[0]) {
+                return product.images[0];
+            }
+            if (product.image) {
+                return product.image;
+            }
+            return "product.jpg";
+        }
+
+        function addToWishlist(productId) {
+            const saved = JSON.parse(localStorage.getItem("wishlist") || "[]");
+            const next = saved.includes(productId) ? saved : [...saved, productId];
+            localStorage.setItem("wishlist", JSON.stringify(next));
+            alert("Saved to wishlist");
+        }
+
+        function buildProductCard(product) {
+            const price = toNumber(product.price);
+            const stock = toNumber(product.stock);
+            const rating = toNumber(product.averageRating || product.rating || 0);
+            const card = document.createElement("div");
+            card.className = "product dynamic-product";
+            card.setAttribute("data-category", String(product.category || "Other"));
+            card.setAttribute("data-price", String(price));
+            card.setAttribute("data-name", String(product.name || "Product"));
+            card.setAttribute("data-rating", String(rating));
+            card.setAttribute("data-stock", String(stock));
+            card.setAttribute("data-condition", String(product.condition || "New"));
+            card.setAttribute("data-admin-product-id", String(product.id || product._id || ""));
+
+            card.innerHTML = `
+                <div class="product-image admin-product-gallery">
+                    <img src="${escapeHTML(getProductImage(product))}" alt="${escapeHTML(product.name || 'Product')}" onerror="this.onerror=null;this.src='product.jpg';">
+                    <button class="save-button" type="button" aria-label="Save product">♡</button>
+                </div>
+                <div class="product-content">
+                    <span class="product-category">${escapeHTML(product.category || 'Other')}</span>
+                    <h3>${escapeHTML(product.name || 'Product')}</h3>
+                    <div class="product-price">₹${price.toLocaleString('en-IN')}</div>
+                    <small>${stock > 0 ? (rating ? rating.toFixed(1) + ' / 5' : 'In stock') : 'Out of stock'}</small>
+                    <button class="primary-product-button" type="button">View Product</button>
+                </div>
+            `;
+
+            const saveButton = card.querySelector(".save-button");
+            if (saveButton) {
+                saveButton.addEventListener("click", function (event) {
+                    event.stopPropagation();
+                    addToWishlist(product.id);
+                });
+            }
+
+            const viewButton = card.querySelector(".primary-product-button");
+            if (viewButton) {
+                viewButton.addEventListener("click", function () {
+                    window.location.href = "product.html?productId=" + encodeURIComponent(product.id);
+                });
+            }
+
+            card.addEventListener("click", function (event) {
+                if (event.target.closest("button")) return;
+                window.location.href = "product.html?productId=" + encodeURIComponent(product.id);
+            });
+
+            return card;
+        }
+
+        function applyShopFilters() {
+            const grid = document.getElementById("shopProducts");
+            if (!grid) return;
+            const search = (document.getElementById("advancedSearch")?.value || "").trim().toLowerCase();
+            const category = document.getElementById("filterCategory")?.value || "";
+            const condition = document.getElementById("filterCondition")?.value || "";
+            const availability = document.getElementById("filterAvailability")?.value || "";
+            const rating = Number(document.getElementById("filterRating")?.value || 0);
+            const offer = document.getElementById("filterOffer")?.value || "";
+            const sort = document.getElementById("filterSort")?.value || "newest";
+
+            const filtered = [...shopState.products].filter(product => {
+                const productName = String(product.name || "").toLowerCase();
+                const productCategory = String(product.category || "").toLowerCase();
+                const productDescription = String(product.description || product.details || "").toLowerCase();
+                const productCondition = String(product.condition || "").toLowerCase();
+                const inStock = Number(product.stock || 0) > 0;
+                const ratingValue = Number(product.averageRating || product.rating || 0);
+                const matchesSearch = !search || productName.includes(search) || productCategory.includes(search) || productDescription.includes(search);
+                const matchesCategory = !category || productCategory.includes(category.toLowerCase());
+                const matchesCondition = !condition || productCondition === condition.toLowerCase();
+                const matchesAvailability = !availability || (availability === "available" ? inStock : !inStock);
+                const matchesRating = !rating || ratingValue >= rating;
+                const matchesOffer = !offer || (offer === "specialOffer" ? Boolean(product.specialOffer) : offer === "featured" ? Boolean(product.featured) : Boolean(product.bestSeller));
+                return matchesSearch && matchesCategory && matchesCondition && matchesAvailability && matchesRating && matchesOffer;
+            });
+
+            const sorted = filtered.sort((a, b) => {
+                if (sort === "low") return Number(a.price || 0) - Number(b.price || 0);
+                if (sort === "high") return Number(b.price || 0) - Number(a.price || 0);
+                if (sort === "rating") return Number(b.averageRating || b.rating || 0) - Number(a.averageRating || a.rating || 0);
+                return Number(b.id || 0) - Number(a.id || 0);
+            });
+
+            const totalItems = sorted.length;
+            const totalPages = Math.max(1, Math.ceil(totalItems / shopState.pageSize));
+            if (shopState.currentPage > totalPages) {
+                shopState.currentPage = totalPages;
+            }
+
+            grid.innerHTML = "";
+            const startIndex = (shopState.currentPage - 1) * shopState.pageSize;
+            const visible = sorted.slice(startIndex, startIndex + shopState.pageSize);
+            visible.forEach(product => grid.appendChild(buildProductCard(product)));
+
+            const meta = document.getElementById("shopResultsMeta");
+            if (meta) {
+                const start = totalItems ? startIndex + 1 : 0;
+                const end = Math.min(startIndex + visible.length, totalItems);
+                meta.textContent = totalItems ? `Showing ${start}-${end} of ${totalItems} products` : "No products match your filters.";
+            }
+
+            renderShopPagination(totalItems);
+
+            if (!visible.length) {
+                const empty = document.createElement("div");
+                empty.className = "dynamic-product-empty";
+                empty.textContent = "No products found for this catalog selection.";
+                grid.appendChild(empty);
+            }
+        }
+
+        async function loadShopProducts() {
+            const params = new URLSearchParams(window.location.search);
+            const category = params.get("category");
+            const q = params.get("q");
+            const condition = params.get("condition");
+            const availability = params.get("availability");
+            const minRating = params.get("minRating");
+            const sort = params.get("sort");
+
+            const queryParams = new URLSearchParams();
+            if (category) queryParams.set("category", category);
+            if (q) queryParams.set("q", q);
+            if (condition) queryParams.set("condition", condition);
+            if (availability) queryParams.set("availability", availability);
+            if (minRating) queryParams.set("minRating", minRating);
+            if (sort) queryParams.set("sort", sort);
+
+            const response = await fetch('/products' + (queryParams.toString() ? '?' + queryParams.toString() : ''), {
+                method: 'GET',
+                cache: 'no-store'
+            });
+
+            if (!response.ok) {
+                throw new Error('Catalog could not be loaded');
+            }
+
+            const products = await response.json();
+            shopState.products = Array.isArray(products) ? products : [];
+
+            const categorySelect = document.getElementById('filterCategory');
+            if (categorySelect && categorySelect.options.length <= 1) {
+                const categories = [...new Set(shopState.products.map(product => String(product.category || 'Other')).filter(Boolean))].sort();
+                categories.forEach(categoryName => {
+                    categorySelect.add(new Option(categoryName, categoryName));
+                });
+            }
+
+            const searchBox = document.getElementById('advancedSearch');
+            if (searchBox) searchBox.value = q || '';
+            if (categorySelect && category) categorySelect.value = category;
+            const conditionSelect = document.getElementById('filterCondition');
+            if (conditionSelect && condition) conditionSelect.value = condition;
+            const availabilitySelect = document.getElementById('filterAvailability');
+            if (availabilitySelect && availability) availabilitySelect.value = availability;
+            const ratingSelect = document.getElementById('filterRating');
+            if (ratingSelect && minRating) ratingSelect.value = minRating;
+            const sortSelect = document.getElementById('filterSort');
+            if (sortSelect && sort) sortSelect.value = sort;
+
+            applyShopFilters();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const fieldIds = ['advancedSearch', 'filterCategory', 'filterCondition', 'filterAvailability', 'filterRating', 'filterOffer', 'filterSort'];
+            fieldIds.forEach(function (id) {
+                const field = document.getElementById(id);
+                if (field) {
+                    field.addEventListener('input', applyShopFilters);
+                    field.addEventListener('change', applyShopFilters);
+                }
+            });
+
+            loadShopProducts().catch(error => {
+                console.error('Shop load error:', error);
+                document.getElementById('shopProducts').innerHTML = '<div class="dynamic-product-empty">Unable to load catalog right now.</div>';
+            });
+        });
+    </script>
+</body>
+</html>

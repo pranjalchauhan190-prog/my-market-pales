@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Checkout | My Marketplace</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f8f7f5;
+            color: #181818;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font-family: inherit;
+        }
+
+        /* HEADER */
+
+        .header {
+            height: 72px;
+            background: #fff;
+            border-bottom: 1px solid #e7e3de;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #181818;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+        }
+
+        .logo-title {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .logo-subtitle {
+            font-size: 9px;
+            color: #777;
+            margin-top: 3px;
+        }
+
+        .secure {
+            font-size: 11px;
+            color: #777;
+        }
+
+        /* PAGE */
+
+        .container {
+            width: min(1100px, 92%);
+            margin: auto;
+        }
+
+        .breadcrumb {
+            padding: 22px 0 15px;
+            color: #777;
+            font-size: 12px;
+        }
+
+        .breadcrumb span {
+            color: #222;
+        }
+
+        .checkout-title {
+            margin-bottom: 24px;
+        }
+
+        .checkout-title h1 {
+            font-family: Georgia, serif;
+            font-size: 34px;
+            font-weight: 500;
+        }
+
+        .checkout-title p {
+            color: #777;
+            font-size: 12px;
+            margin-top: 7px;
+        }
+
+        /* GRID */
+
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1.35fr .75fr;
+            gap: 22px;
+            align-items: start;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e8e4df;
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 18px;
+        }
+
+        .card-title {
+            font-family: Georgia, serif;
+            font-size: 21px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        /* FORM */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            border: 1px solid #dcd7d1;
+            border-radius: 8px;
+            background: #fff;
+            outline: none;
+            padding: 13px 12px;
+            font-size: 12px;
+            color: #222;
+            transition: .2s;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #8e6b45;
+            box-shadow: 0 0 0 3px rgba(142,107,69,.08);
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .required {
+            color: #a44a4a;
+        }
+
+        /* PRODUCT SUMMARY */
+
+        .product-summary {
+            display: flex;
+            gap: 13px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #eeeae5;
+        }
+
+        .product-summary img {
+            width: 78px;
+            height: 88px;
+            object-fit: cover;
+            border-radius: 9px;
+            background: #f1efec;
+            border: 1px solid #e8e3dc;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-name {
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 7px;
+        }
+
+        .product-price {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .product-quantity {
+            font-size: 11px;
+            color: #777;
+            margin-top: 7px;
+        }
+
+        /* PRICE */
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            padding: 8px 0;
+            color: #555;
+        }
+
+        .price-row.total {
+            border-top: 1px solid #e7e3de;
+            margin-top: 9px;
+            padding-top: 16px;
+            color: #181818;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .coupon-box {
+            display: flex;
+            gap: 7px;
+            margin: 16px 0 4px;
+        }
+
+        .coupon-box input {
+            min-width: 0;
+            flex: 1;
+            height: 38px;
+            border: 1px solid #ddd5cf;
+            border-radius: 7px;
+            padding: 0 10px;
+            text-transform: uppercase;
+        }
+
+        .coupon-box button {
+            border: 0;
+            border-radius: 7px;
+            padding: 0 13px;
+            background: #76533a;
+            color: white;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        #couponMessage {
+            min-height: 17px;
+            color: #7b4d35;
+            font-size: 11px;
+        }
+
+        .delivery-free {
+            color: #32734e;
+            font-weight: 700;
+        }
+
+        /* PAYMENT */
+
+        .payment-option {
+            border: 1px solid #ddd8d1;
+            border-radius: 9px;
+            padding: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            margin-bottom: 9px;
+        }
+
+        .payment-option:hover {
+            border-color: #a88a67;
+        }
+
+        .payment-option input {
+            width: auto;
+        }
+
+        .payment-name {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .payment-desc {
+            font-size: 10px;
+            color: #777;
+            margin-top: 3px;
+        }
+
+        .qr-payment-box {
+            display: none;
+            margin-top: 14px;
+            padding: 16px;
+            border: 1px solid #eadfd7;
+            border-radius: 10px;
+            background: #fffaf5;
+            text-align: center;
+        }
+
+        .qr-payment-box.show {
+            display: block;
+        }
+
+        .qr-payment-box img {
+            width: min(220px, 100%);
+            aspect-ratio: 1;
+            object-fit: contain;
+            background: white;
+            border: 1px solid #eee;
+            padding: 8px;
+        }
+
+        .qr-payment-box p {
+            margin: 10px 0 0;
+            color: #6d625b;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .upi-reference {
+            display: grid;
+            gap: 6px;
+            margin-top: 12px;
+            text-align: left;
+        }
+
+        .upi-reference label {
+            color: #5c514b;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .upi-reference input {
+            width: 100%;
+            height: 38px;
+            border: 1px solid #dcd2ca;
+            border-radius: 7px;
+            padding: 0 10px;
+            font-size: 12px;
+        }
+
+        /* BUTTON */
+
+        .place-order {
+            width: 100%;
+            height: 53px;
+            border: none;
+            border-radius: 9px;
+            background: #181818;
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .5px;
+            cursor: pointer;
+            transition: .2s;
+            margin-top: 8px;
+        }
+
+        .place-order:hover {
+            background: #946633;
+            transform: translateY(-1px);
+        }
+
+        .back-button {
+            width: 100%;
+            height: 45px;
+            border: 1px solid #d8d3cd;
+            border-radius: 9px;
+            background: white;
+            color: #333;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .back-button:hover {
+            background: #f5f2ee;
+        }
+
+        /* SECURITY */
+
+        .security-box {
+            text-align: center;
+            color: #777;
+            font-size: 10px;
+            line-height: 1.6;
+            margin-top: 14px;
+        }
+
+        /* SUCCESS */
+
+        .success {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.42);
+            z-index: 5000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .success.show {
+            display: flex;
+        }
+
+        .success-box {
+            width: min(430px, 100%);
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 55px;
+            height: 55px;
+            margin: auto;
+            border-radius: 50%;
+            background: #e8f3ec;
+            color: #32734e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .success-box h2 {
+            font-family: Georgia, serif;
+            font-weight: 500;
+            font-size: 25px;
+            margin-top: 16px;
+        }
+
+        .success-box p {
+            color: #777;
+            font-size: 12px;
+            line-height: 1.7;
+            margin: 10px 0 20px;
+        }
+
+        .success-button {
+            width: 100%;
+            height: 47px;
+            border: none;
+            border-radius: 8px;
+            background: #181818;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 800px) {
+
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 520px) {
+
+            .header {
+                padding: 0 4%;
+            }
+
+            .logo-subtitle,
+            .secure {
+                display: none;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .checkout-title h1 {
+                font-size: 29px;
+            }
+
+            .card {
+                padding: 19px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+        }
+
+        /* =========================================
+   HOME PAGE PREMIUM BRAND
+========================================= */
+
+.premium-brand {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    height: 100% !important;
+    white-space: nowrap !important;
+}
+
+.premium-lotus {
+    width: 43px !important;
+    height: 43px !important;
+    object-fit: contain !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+}
+
+.premium-brand-text {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+}
+
+.premium-name {
+    display: flex !important;
+    align-items: baseline !important;
+    gap: 5px !important;
+    line-height: 1 !important;
+}
+
+.premium-my {
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-size: 16px !important;
+    font-style: italic !important;
+    font-weight: 500 !important;
+    color: #d76b8e !important;
+    letter-spacing: .7px !important;
+}
+
+.premium-marketplace {
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-size: 21px !important;
+    font-weight: 700 !important;
+    color: #252525 !important;
+    letter-spacing: .15px !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,.08) !important;
+}
+
+.premium-line {
+    width: 78px !important;
+    height: 1px !important;
+    margin-top: 5px !important;
+    background: linear-gradient(
+        90deg,
+        #e7a1b7,
+        #d15c82,
+        transparent
+    ) !important;
+}
+    </style>
+    <script src="logo.js"></script>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="logo" onclick="goHome()">
+
+    <div class="premium-brand">
+
+        <img
+            src="./lotus-logo.png"
+            alt="My Marketplace"
+            class="premium-lotus"
+        >
+
+        <div class="premium-brand-text">
+
+            <div class="premium-name">
+
+                <span class="premium-my">
+                    My
+                </span>
+
+                <span class="premium-marketplace">
+                    Marketplace
+                </span>
+
+            </div>
+
+            <div class="premium-line"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+        <div class="secure">
+            🔒 Secure Checkout
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+        <div class="breadcrumb">
+            Home <b>›</b> Product <b>›</b>
+            <span>Checkout</span>
+        </div>
+
+
+        <div class="checkout-title">
+
+            <h1>
+                Complete Your Order
+            </h1>
+
+            <p>
+                Enter your delivery details to place your order.
+            </p>
+
+        </div>
+
+
+        <div class="checkout-grid">
+
+
+            <!-- LEFT -->
+
+            <div>
+
+
+                <!-- CUSTOMER DETAILS -->
+
+                <section class="card">
+
+                    <h2 class="card-title">
+                        Customer Details
+                    </h2>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label>
+                                Full Name <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="customerName"
+                                placeholder="Enter your full name"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Mobile Number <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="customerPhone"
+                                placeholder="10-digit mobile number"
+                                maxlength="10"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group full">
+
+                            <label>
+                                Email Address
+                            </label>
+
+                            <input
+                                type="email"
+                                id="customerEmail"
+                                placeholder="Enter your email address"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- DELIVERY DETAILS -->
+
+                <section class="card">
+
+                    <h2 class="card-title">
+                        Delivery Address
+                    </h2>
+
+                    <div class="form-grid">
+
+                        <div class="form-group full">
+
+                            <label>
+                                House / Flat / Street Address
+                                <span class="required">*</span>
+                            </label>
+
+                            <textarea
+                                id="customerAddress"
+                                placeholder="House number, street, area, landmark..."
+                            ></textarea>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                City <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="customerCity"
+                                placeholder="Your city"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                State <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="customerState"
+                                placeholder="Your state"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                PIN Code <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="customerPincode"
+                                placeholder="6-digit PIN"
+                                maxlength="6"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Landmark
+                            </label>
+
+                            <input
+                                type="text"
+                                id="customerLandmark"
+                                placeholder="Nearby landmark"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- CUSTOMIZATION -->
+
+                <section class="card">
+
+                    <h2 class="card-title">
+                        Product / Customization Details
+                    </h2>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label>
+                                Size
+                            </label>
+
+                            <select id="customerSize">
+
+                                <option value="">
+                                    Select size
+                                </option>
+
+                                <option>XS</option>
+                                <option>S</option>
+                                <option>M</option>
+                                <option>L</option>
+                                <option>XL</option>
+                                <option>XXL</option>
+                                <option>Custom Size</option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Preferred Delivery
+                            </label>
+
+                            <select id="deliveryPreference">
+
+                                <option>
+                                    Standard Delivery
+                                </option>
+
+                                <option>
+                                    Express Delivery
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group full">
+
+                            <label>
+                                Special Instructions
+                            </label>
+
+                            <textarea
+                                id="customInstructions"
+                                placeholder="Any special size, fitting, stitching or design instructions..."
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- PAYMENT -->
+
+                <section class="card">
+
+                    <h2 class="card-title">
+                        Payment Method
+                    </h2>
+
+
+                    <label class="payment-option">
+
+                        <input
+                            type="radio"
+                            name="payment"
+                            value="UPI QR Payment"
+                            checked
+                        >
+
+                        <div>
+
+                            <div class="payment-name">
+                                UPI QR Payment
+                            </div>
+
+                            <div class="payment-desc">
+                                Scan the QR and pay directly from your UPI app
+                            </div>
+
+                        </div>
+
+                    </label>
+
+                    <div class="qr-payment-box show" id="qrPaymentBox">
+                        <img src="assets/payment-qr.png" alt="UPI payment QR code">
+                        <p>Scan this QR to pay directly. Your order will remain Pending Verification until an admin verifies payment.</p>
+                        <div class="upi-reference">
+                            <label for="paymentReference">After payment, enter your UTR / transaction reference</label>
+                            <input id="paymentReference" type="text" maxlength="80" placeholder="Enter UTR or transaction reference">
+                        </div>
+                    </div>
+
+                   <label
+    class="payment-option"
+    id="cashOnDeliveryOption"
+>
+
+    <input
+        type="radio"
+        name="payment"
+        value="Cash on Delivery"
+    >
+
+    <div>
+
+        <div class="payment-name">
+            Cash on Delivery
+        </div>
+
+        <div class="payment-desc">
+            Pay when your order arrives
+        </div>
+
+    </div>
+
+</label>
+                   
+                    </label>
+
+                </section>
+
+            </div>
+
+
+            <!-- RIGHT / ORDER SUMMARY -->
+
+            <aside class="order-summary">
+
+                <section class="card">
+
+                    <h2 class="card-title">
+                        Order Summary
+                    </h2>
+
+
+                    <div
+                        id="productSummary"
+                        class="product-summary"
+                    >
+
+                        <img
+                            id="summaryImage"
+                            src="product.jpg"
+                            alt="Product"
+                        >
+
+                        <div class="product-info">
+
+                            <div
+                                class="product-name"
+                                id="summaryName"
+                            >
+                                Product
+                            </div>
+
+                            <div
+                                class="product-price"
+                                id="summaryPrice"
+                            >
+                                ₹0
+                            </div>
+
+                            <div
+                                class="product-quantity"
+                                id="summaryQuantity"
+                            >
+                                Quantity: 1
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="price-row">
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <span id="subtotal">
+                            ₹0
+                        </span>
+
+                    </div>
+
+
+                    <div class="price-row">
+
+                        <span>
+                            Delivery
+                        </span>
+
+                        <span class="delivery-free">
+                            FREE
+                        </span>
+
+                    </div>
+
+                    <div class="coupon-box">
+                        <input id="couponCode" type="text" placeholder="Coupon code" maxlength="32">
+                        <button type="button" onclick="applyCoupon()">APPLY</button>
+                    </div>
+                    <div id="couponMessage"></div>
+
+                    <div class="price-row" id="discountRow" style="display:none">
+                        <span>Discount</span>
+                        <span id="discountAmount">-₹0</span>
+                    </div>
+
+
+                    <div class="price-row total">
+
+                        <span>
+                            Total
+                        </span>
+
+                        <span id="totalPrice">
+                            ₹0
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        class="place-order"
+                        type="button"
+                        onclick="placeOrder()"
+                    >
+                        PLACE ORDER
+                    </button>
+
+
+                    <button
+                        class="back-button"
+                        type="button"
+                        onclick="goBack()"
+                    >
+                        ← BACK TO PRODUCT
+                    </button>
+
+
+                    <div class="security-box">
+
+                        🔒 Your information is kept secure.<br>
+                        By placing this order, you agree to our
+                        terms and conditions.
+
+                    </div>
+
+                </section>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+
+    <!-- SUCCESS -->
+
+    <div
+        class="success"
+        id="successModal"
+    >
+
+        <div class="success-box">
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <h2 id="successTitle">
+                Order Received
+            </h2>
+
+            <p>
+                Thank you for shopping with My Marketplace.
+                Your order has been received and is being processed.
+            </p>
+
+            <button
+                class="success-button"
+                onclick="openOrders()"
+            >
+                VIEW MY ORDERS
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /* =========================================
+           PRODUCT FROM BUY NOW
+        ========================================= */
+
+        let buyNowProduct = [];
+
+        try {
+            const rawBuyNowProduct = localStorage.getItem("buyNowProduct");
+            buyNowProduct = rawBuyNowProduct ? JSON.parse(rawBuyNowProduct) : [];
+        } catch (error) {
+            buyNowProduct = [];
+        }
+
+
+        let checkoutCart = [];
+
+        try {
+            const rawCart = localStorage.getItem("cart");
+            checkoutCart = rawCart ? JSON.parse(rawCart) : [];
+        } catch (error) {
+            checkoutCart = [];
+        }
+
+
+        let checkoutSource =
+            localStorage.getItem(
+                "checkoutSource"
+            );
+
+
+        let orderProduct = null;
+
+        let orderProducts = [];
+
+        let appliedCoupon = null;
+
+        async function applyCoupon() {
+            const input = document.getElementById("couponCode");
+            const message = document.getElementById("couponMessage");
+            const subtotal = orderProducts.reduce((sum, item) => sum + (Number(item.price) || 0) * (Number(item.quantity) || 1), 0);
+            if (!input || !input.value.trim()) return;
+            try {
+                const response = await fetch("/validate-coupon", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: input.value.trim(), subtotal }) });
+                const result = await response.json();
+                if (!response.ok || !result.success) throw new Error(result.message || "Coupon could not be applied");
+                appliedCoupon = result;
+                document.getElementById("discountRow").style.display = "flex";
+                document.getElementById("discountAmount").innerText = "-₹" + Number(result.discount).toLocaleString("en-IN");
+                document.getElementById("totalPrice").innerText = "₹" + Number(result.total).toLocaleString("en-IN");
+                message.innerText = "Coupon applied";
+            } catch (error) {
+                appliedCoupon = null;
+                message.innerText = error.message;
+            }
+        }
+
+
+        /* =========================================
+           LOAD ORDER
+        ========================================= */
+
+        function loadCheckout() {
+
+            /*
+             * BUY NOW PRODUCT HAS PRIORITY
+             */
+
+            if (
+                checkoutSource === "buyNow" &&
+                Array.isArray(buyNowProduct) &&
+                buyNowProduct.length > 0
+            ) {
+
+                orderProduct =
+                    buyNowProduct[0];
+
+                orderProducts =
+                    buyNowProduct;
+
+            }
+
+            /*
+             * OTHERWISE USE CART
+             */
+
+            else if (checkoutCart.length > 0) {
+
+                orderProduct =
+                    checkoutCart[0];
+
+                orderProducts =
+                    checkoutCart.filter(item => item && item.name);
+
+            }
+
+
+            if (!orderProduct) {
+
+                orderProduct = {
+
+                    name: "Product",
+
+                    price: 0,
+
+                    quantity: 1,
+
+                    image: "product.jpg"
+
+                };
+
+            }
+
+
+            const name =
+                orderProduct.name || "Product";
+
+
+            const price =
+                Number(orderProduct.price) || 0;
+
+
+            const quantity =
+                Number(orderProduct.quantity) || 1;
+
+
+            const total =
+                orderProducts.reduce(
+                    (sum, item) =>
+                        sum +
+                        (Number(item.price) || 0) *
+                        (Number(item.quantity) || 1),
+                    0
+                );
+
+
+            document.getElementById(
+                "summaryName"
+            ).innerText = name;
+
+
+            document.getElementById(
+                "summaryPrice"
+            ).innerText =
+                "₹" +
+                price.toLocaleString("en-IN");
+
+
+            document.getElementById(
+                "summaryQuantity"
+            ).innerText =
+                "Quantity: " + quantity;
+
+
+            document.getElementById(
+                "summaryImage"
+            ).src =
+                orderProduct.image ||
+                "product.jpg";
+
+
+            document.getElementById(
+                "subtotal"
+            ).innerText =
+                "₹" +
+                total.toLocaleString("en-IN");
+
+
+            document.getElementById(
+                "totalPrice"
+            ).innerText =
+                "₹" +
+                total.toLocaleString("en-IN");
+
+        }
+
+
+        /* =========================================
+           PLACE ORDER
+        ========================================= */
+let orderSubmitting = false;
+
+async function placeOrder() {
+
+    if (orderSubmitting) {
+        return;
+    }
+
+    const name =
+        document.getElementById(
+            "customerName"
+        ).value.trim();
+
+    const phone =
+        document.getElementById(
+            "customerPhone"
+        ).value.trim();
+
+    const email =
+        document.getElementById(
+            "customerEmail"
+        ).value.trim();
+
+    const address =
+        document.getElementById(
+            "customerAddress"
+        ).value.trim();
+
+    const city =
+        document.getElementById(
+            "customerCity"
+        ).value.trim();
+
+    const state =
+        document.getElementById(
+            "customerState"
+        ).value.trim();
+
+    const pincode =
+        document.getElementById(
+            "customerPincode"
+        ).value.trim();
+
+    const landmark =
+        document.getElementById(
+            "customerLandmark"
+        ).value.trim();
+
+
+    /* =====================================
+       VALIDATION
+    ===================================== */
+
+    if (!name) {
+
+        alert(
+            "Please enter your full name."
+        );
+
+        return;
+
+    }
+
+
+    if (!/^[0-9]{10}$/.test(phone)) {
+
+        alert(
+            "Please enter a valid 10-digit mobile number."
+        );
+
+        return;
+
+    }
+
+
+    if (!address) {
+
+        alert(
+            "Please enter your delivery address."
+        );
+
+        return;
+
+    }
+
+
+    if (!city) {
+
+        alert(
+            "Please enter your city."
+        );
+
+        return;
+
+    }
+
+
+    if (!state) {
+
+        alert(
+            "Please enter your state."
+        );
+
+        return;
+
+    }
+
+
+    if (!/^[0-9]{6}$/.test(pincode)) {
+
+        alert(
+            "Please enter a valid 6-digit PIN code."
+        );
+
+        return;
+
+    }
+
+
+    const paymentElement =
+        document.querySelector(
+            'input[name="payment"]:checked'
+        );
+
+
+    if (!paymentElement) {
+
+        alert(
+            "Please select a payment method."
+        );
+
+        return;
+
+    }
+
+
+    const payment =
+        paymentElement.value;
+
+    const paymentReferenceElement =
+        document.getElementById("paymentReference");
+
+    const paymentReference =
+        paymentReferenceElement
+            ? paymentReferenceElement.value.trim()
+            : "";
+
+    if (
+        payment === "UPI QR Payment" &&
+        !paymentReference
+    ) {
+        alert("Please complete the QR payment and enter the UTR / transaction reference.");
+        if (paymentReferenceElement) paymentReferenceElement.focus();
+        return;
+    }
+
+    orderSubmitting = true;
+    const placeOrderButton = document.querySelector(".place-order");
+    if (placeOrderButton) placeOrderButton.disabled = true;
+
+
+    /* =====================================
+       PRODUCT DATA
+    ===================================== */
+
+    const productName =
+        orderProduct.name || "Product";
+
+    const productPrice =
+        Number(orderProduct.price) || 0;
+
+    const quantity =
+        Number(orderProduct.quantity) || 1;
+
+    const productImage =
+        orderProduct.image ||
+        "product.jpg";
+
+    const total =
+        orderProducts.reduce(
+            (sum, item) =>
+                sum +
+                (Number(item.price) || 0) *
+                (Number(item.quantity) || 1),
+            0
+        );
+
+
+    /* =====================================
+       CUSTOMIZATION DATA
+    ===================================== */
+
+    const size =
+        document.getElementById(
+            "customerSize"
+        ).value;
+
+    const delivery =
+        document.getElementById(
+            "deliveryPreference"
+        ).value;
+
+    const instructions =
+        document.getElementById(
+            "customInstructions"
+        ).value.trim();
+
+
+    /* =====================================
+       COMPLETE ORDER
+       OLD + NEW FORMAT
+    ===================================== */
+
+    const order = {
+
+        /* OLD ADMIN FORMAT */
+
+        name: name,
+
+        mobile: phone,
+
+        email: email,
+
+        address: address,
+
+        city: city,
+
+        state: state,
+
+        pincode: pincode,
+
+        landmark: landmark,
+
+        productName: productName,
+
+        productPrice: productPrice,
+
+        measurements:
+            size || "Not specified",
+
+        payment: payment,
+
+
+        /* NEW MY ORDERS FORMAT */
+
+        orderId:
+            "MM" + Date.now(),
+
+        date:
+            new Date().toISOString(),
+
+        customer: {
+
+            name: name,
+
+            phone: phone,
+
+            email: email,
+
+            address: address,
+
+            city: city,
+
+            state: state,
+
+            pincode: pincode,
+
+            landmark: landmark
+
+        },
+
+        product: {
+
+            name: productName,
+
+            price: productPrice,
+
+            quantity: quantity,
+
+            image: productImage
+
+        },
+
+        products: orderProducts.map(item => ({
+
+            name: item.name || "Product",
+
+            productId: item.productId || "",
+
+            variantId: item.variantId || item.variant?.id || item.variant || "",
+
+            price: Number(item.price) || 0,
+
+            quantity: Number(item.quantity) || 1,
+
+            image: item.image || "product.jpg"
+
+        })),
+
+        customization: {
+
+            size: size,
+
+            delivery: delivery,
+
+            instructions: instructions
+
+        },
+
+        paymentMethod: payment,
+
+        paymentReference: paymentReference,
+
+        total: total,
+
+        couponCode: appliedCoupon ? appliedCoupon.code : ""
+
+    };
+
+
+    /* =====================================
+       SEND TO SERVER
+    ===================================== */
+
+    try {
+
+        const response =
+            await fetch(
+                "/place-order",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify(
+                            order
+                        )
+
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Order could not be saved."
+            );
+
+        }
+
+
+        /* =================================
+           SERVER RESPONSE
+        ================================= */
+
+        const result =
+            await response.json();
+
+
+        if (
+            !result ||
+            !result.success ||
+            !result.order
+        ) {
+
+            throw new Error(
+                "Invalid server response."
+            );
+
+        }
+
+
+        const savedOrder =
+            result.order;
+
+        localStorage.setItem(
+            "myMarketplaceLastOrderPhone",
+            phone
+        );
+
+
+        /* =================================
+           LOCAL MY ORDERS BACKUP
+        ================================= */
+
+        let orders = [];
+
+        try {
+            const rawOrders = localStorage.getItem("orders");
+            orders = rawOrders ? JSON.parse(rawOrders) : [];
+        } catch (error) {
+            orders = [];
+        }
+
+
+        /*
+         * Remove malformed orders created
+         * by the previous incorrect code.
+         */
+
+        orders =
+            orders.filter(
+                function(item) {
+
+                    return (
+                        item &&
+                        item.product &&
+                        item.customer
+                    );
+
+                }
+            );
+
+
+        orders.push(
+            savedOrder
+        );
+
+
+        localStorage.setItem(
+            "orders",
+            JSON.stringify(
+                orders
+            )
+        );
+
+
+        /* =================================
+           CLEAR BUY NOW DATA
+        ================================= */
+
+        if (
+            checkoutSource === "buyNow"
+        ) {
+
+            localStorage.removeItem(
+                "buyNowProduct"
+            );
+
+            localStorage.removeItem(
+                "checkoutSource"
+            );
+
+        }
+
+
+        /* =================================
+           SUCCESS
+        ================================= */
+
+        document.getElementById(
+            "successModal"
+        ).classList.add(
+            "show"
+        );
+
+
+    }
+    catch (error) {
+
+        console.error(
+            "Order placement error:",
+            error
+        );
+
+        alert(
+            "Order could not be placed. Please try again."
+        );
+
+        orderSubmitting = false;
+        if (placeOrderButton) placeOrderButton.disabled = false;
+
+    }
+
+}
+         
+        /* =========================================
+           NAVIGATION
+        ========================================= */
+
+        function goHome() {
+
+            window.location.href =
+                "index.html";
+
+        }
+
+
+        function goBack() {
+
+            window.history.back();
+
+        }
+
+
+        function openOrders() {
+
+            window.location.href =
+                "my-orders.html";
+
+        }
+
+
+        /* =========================================
+           START
+        ========================================= */
+
+       document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        loadCheckout();
+
+        document.querySelectorAll('input[name="payment"]').forEach(function (input) {
+            input.addEventListener("change", function () {
+                const qrBox = document.getElementById("qrPaymentBox");
+                if (qrBox) {
+                    qrBox.classList.toggle("show", input.value === "UPI QR Payment" && input.checked);
+                }
+            });
+        });
+
+
+        /* =========================================
+   GLOBAL CASH ON DELIVERY CONTROL
+========================================= */
+
+const COD_SETTING_KEY =
+    "myMarketplaceCODEnabled";
+
+
+const codEnabled =
+    localStorage.getItem(
+        COD_SETTING_KEY
+    ) !== "false";
+
+
+const codInput =
+    document.querySelector(
+        'input[name="payment"][value="Cash on Delivery"]'
+    );
+
+
+const codOption =
+    document.getElementById(
+        "cashOnDeliveryOption"
+    );
+
+
+if (codInput && codOption) {
+
+    const codName =
+        codOption.querySelector(
+            ".payment-name"
+        );
+
+    const codDesc =
+        codOption.querySelector(
+            ".payment-desc"
+        );
+
+
+    if (!codEnabled) {
+
+        /* Disable COD */
+
+        codInput.checked =
+            false;
+
+        codInput.disabled =
+            true;
+
+
+        codOption.style.opacity =
+            "0.55";
+
+        codOption.style.cursor =
+            "not-allowed";
+
+
+        codOption.style.background =
+            "#f3f3f3";
+
+
+        if (codName) {
+
+            codName.textContent =
+                "Cash on Delivery";
+
+        }
+
+
+        if (codDesc) {
+
+            codDesc.textContent =
+                "This Premium Product — Cash on Delivery Not Available";
+
+        }
+
+
+        /* Keep Online Payment selected */
+
+        const onlineInput =
+            document.querySelector(
+                'input[name="payment"][value="UPI QR Payment"]'
+            );
+
+
+        if (onlineInput) {
+
+            onlineInput.checked =
+                true;
+
+        }
+
+    }
+
+    else {
+
+        /* COD Enabled */
+
+        codInput.disabled =
+            false;
+
+
+        codOption.style.opacity =
+            "1";
+
+        codOption.style.cursor =
+            "pointer";
+
+        codOption.style.background =
+            "";
+
+
+        if (codName) {
+
+            codName.textContent =
+                "Cash on Delivery";
+
+        }
+
+
+        if (codDesc) {
+
+            codDesc.textContent =
+                "Pay when your order arrives";
+
+        }
+
+    }
+
+}
+
+    }
+);
+    </script>
+
+</body>
+</html>

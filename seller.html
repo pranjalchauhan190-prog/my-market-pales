@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Seller Center | My Marketplace</title>
+<link rel="stylesheet" href="style.css">
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background: linear-gradient(180deg, #fff8fb 0%, #fff 100%);
+        color: #2d2127;
+        font-family: Arial, sans-serif;
+    }
+    a { color: inherit; text-decoration: none; }
+    .seller-shell {
+        max-width: 1180px;
+        margin: 32px auto 48px;
+        padding: 0 18px;
+    }
+    .seller-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 20px 24px;
+        background: #fff;
+        border: 1px solid #f4d9e3;
+        border-radius: 22px;
+        box-shadow: 0 12px 30px rgba(186, 100, 133, 0.10);
+        margin-bottom: 22px;
+    }
+    .seller-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .seller-brand-mark {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #d84c7a, #a62e52);
+        color: #fff;
+        font-weight: 700;
+        box-shadow: 0 8px 18px rgba(176, 68, 102, 0.25);
+    }
+    .seller-brand h1 {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(1.8rem, 3vw, 2.6rem);
+        color: #2a2229;
+    }
+    .seller-badge {
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: #fff0f5;
+        border: 1px solid #f0c7d7;
+        color: #c45378;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+    .seller-panel {
+        background: #fff;
+        border: 1px solid #f1dce5;
+        border-radius: 20px;
+        padding: 24px;
+        margin-bottom: 18px;
+        box-shadow: 0 12px 30px rgba(169, 92, 125, 0.08);
+    }
+    .seller-panel h2 {
+        margin: 0 0 16px;
+        font-family: Georgia, "Times New Roman", serif;
+        color: #38262e;
+        font-size: clamp(1.4rem, 2vw, 2rem);
+    }
+    .seller-form {
+        display: grid;
+        gap: 12px;
+        max-width: 520px;
+    }
+    .seller-form-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+    .seller-form input,
+    .seller-form textarea,
+    .seller-form select,
+    .seller-form button {
+        width: 100%;
+        font: inherit;
+    }
+    .seller-form input,
+    .seller-form textarea,
+    .seller-form select {
+        min-height: 48px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid #ead6df;
+        background: #fffdfd;
+        color: #2d2127;
+        transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .seller-form textarea {
+        min-height: 110px;
+        resize: vertical;
+    }
+    .seller-form input:focus,
+    .seller-form textarea:focus,
+    .seller-form select:focus {
+        outline: none;
+        border-color: #d78aa8;
+        background: #fffafb;
+        box-shadow: 0 0 0 4px rgba(215, 138, 168, 0.12);
+    }
+    .primary-btn, .secondary-btn, .ghost-btn,
+    .seller-form button,
+    #sellerLogout {
+        min-height: 46px;
+        padding: 11px 18px;
+        border-radius: 12px;
+        border: 1px solid transparent;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .primary-btn, .seller-form button, #sellerLogout {
+        background: linear-gradient(135deg, #d14b7b 0%, #b73462 100%);
+        color: #fff;
+        box-shadow: 0 12px 24px rgba(181, 52, 98, 0.20);
+    }
+    .primary-btn:hover, .seller-form button:hover, #sellerLogout:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 26px rgba(181, 52, 98, 0.28);
+    }
+    .secondary-btn {
+        background: #fff0f5;
+        border-color: #f0ccd9;
+        color: #b93663;
+    }
+    .secondary-btn:hover {
+        background: #fff6f9;
+    }
+    .seller-divider {
+        height: 1px;
+        background: linear-gradient(90deg, rgba(208, 155, 179, 0.2), rgba(208, 155, 179, 0.8), rgba(208, 155, 179, 0.2));
+        margin: 18px 0 16px;
+    }
+    .seller-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 14px;
+        margin-bottom: 16px;
+    }
+    .seller-stat {
+        background: #fff9fb;
+        border: 1px solid #f2dbe5;
+        border-radius: 16px;
+        padding: 18px 16px;
+        box-shadow: 0 8px 22px rgba(225, 140, 170, 0.08);
+    }
+    .seller-stat .label {
+        display: block;
+        margin-bottom: 6px;
+        color: #986b7c;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+    .seller-stat .value {
+        font-size: clamp(1.6rem, 2vw, 2.2rem);
+        font-weight: 700;
+        color: #31262c;
+    }
+    .muted {
+        color: #8a6d77;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+    .status-box {
+        border: 1px solid #efd9e0;
+        background: #fff8fb;
+        border-radius: 12px;
+        padding: 10px 12px;
+        color: #5f4a50;
+    }
+    .hidden { display: none !important; }
+    .error { color: #a43f5e; }
+    @media (max-width: 700px) {
+        .seller-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .seller-form-row {
+            grid-template-columns: 1fr;
+        }
+        .seller-panel {
+            padding: 18px 16px;
+        }
+    }
+</style>
+</head>
+<body>
+<header class="topbar">
+    <div class="topbar-inner">
+        <div class="brand-wrap" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <div class="brand-logo">M</div>
+            <div>
+                <div class="brand-name">My Marketplace</div>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <a href="index.html">Home</a>
+            <a href="shop.html">Shop</a>
+            <a href="wishlist.html">Saved</a>
+            <a href="my-orders.html">Orders</a>
+            <a href="account.html">Account</a>
+        </nav>
+    </div>
+</header>
+
+<main class="seller-shell">
+    <div class="seller-header">
+        <div class="seller-brand">
+            <div class="seller-brand-mark">M</div>
+            <h1>Seller Center</h1>
+        </div>
+        <div class="seller-badge">Vendor Portal</div>
+    </div>
+
+    <section id="authPanel" class="seller-panel">
+        <h2>Seller registration</h2>
+        <form id="sellerRegister" class="seller-form">
+            <input id="registerName" placeholder="Business name" required>
+            <input id="registerEmail" type="email" placeholder="Email" required>
+            <input id="registerPhone" maxlength="10" placeholder="Phone">
+            <input id="registerPassword" type="password" minlength="6" placeholder="Password" required>
+            <button type="submit">Submit registration</button>
+        </form>
+
+        <div class="seller-divider"></div>
+
+        <h2>Seller login</h2>
+        <form id="sellerLogin" class="seller-form">
+            <input id="loginEmail" type="email" placeholder="Email" required>
+            <input id="loginPassword" type="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p id="authMessage" class="muted"></p>
+    </section>
+
+    <section id="dashboard" class="hidden">
+        <div class="seller-grid">
+            <div class="seller-stat">
+                <span class="label">Products</span>
+                <span class="value" id="productCount">0</span>
+            </div>
+            <div class="seller-stat">
+                <span class="label">Orders</span>
+                <span class="value" id="orderCount">0</span>
+            </div>
+            <div class="seller-stat">
+                <span class="label">Earnings</span>
+                <span class="value" id="earnings">₹0</span>
+            </div>
+        </div>
+
+        <section class="seller-panel">
+            <h2>Add product</h2>
+            <form id="sellerProduct" class="seller-form">
+                <div class="seller-form-row">
+                    <input id="sellerProductName" placeholder="Product name" required>
+                    <input id="sellerProductPrice" type="number" min="0" placeholder="Price" required>
+                </div>
+                <div class="seller-form-row">
+                    <input id="sellerProductStock" type="number" min="0" placeholder="Stock" required>
+                    <input id="sellerProductCategory" placeholder="Category">
+                </div>
+                <textarea id="sellerProductDescription" placeholder="Description"></textarea>
+                <button type="submit">Add product</button>
+            </form>
+            <p id="productMessage" class="muted"></p>
+        </section>
+
+        <section class="seller-panel">
+            <h2>Your products</h2>
+            <div id="sellerProducts" class="status-box">No products yet.</div>
+        </section>
+
+        <section class="seller-panel">
+            <h2>Your orders</h2>
+            <div id="sellerOrders" class="status-box">No orders yet.</div>
+        </section>
+
+        <button id="sellerLogout" type="button">Logout</button>
+    </section>
+</main>
+<script>
+const $=id=>document.getElementById(id);const post=(url,body)=>fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(async r=>({ok:r.ok,data:await r.json()}));
+async function loadDashboard(){const r=await fetch('/seller-dashboard');if(!r.ok){$('authPanel').classList.remove('hidden');$('dashboard').classList.add('hidden');return}const d=await r.json();$('authPanel').classList.add('hidden');$('dashboard').classList.remove('hidden');$('productCount').textContent=d.products.length;$('orderCount').textContent=d.orders.length;$('earnings').textContent='₹'+Number(d.earnings||0).toLocaleString('en-IN');$('sellerProducts').innerHTML=d.products.map(p=>`<p>${p.name} · ₹${p.price} · Stock ${p.stock}</p>`).join('')||'No products';$('sellerOrders').innerHTML=d.orders.map(o=>`<p>${o.orderId||o.id} · ₹${o.total||0} · ${o.orderStatus||'Order Placed'}</p>`).join('')||'No orders'}
+$('sellerRegister').onsubmit=async e=>{e.preventDefault();const r=await post('/seller-register',{name:$('registerName').value,email:$('registerEmail').value,phone:$('registerPhone').value,password:$('registerPassword').value});$('authMessage').textContent=r.data.message||'Registration submitted'};
+$('sellerLogin').onsubmit=async e=>{e.preventDefault();const r=await post('/seller-login',{email:$('loginEmail').value,password:$('loginPassword').value});$('authMessage').textContent=r.data.message||'';if(r.ok)loadDashboard()};
+$('sellerProduct').onsubmit=async e=>{e.preventDefault();const r=await post('/seller-products',{name:$('sellerProductName').value,price:Number($('sellerProductPrice').value),stock:Number($('sellerProductStock').value),category:$('sellerProductCategory').value,description:$('sellerProductDescription').value});$('productMessage').textContent=r.data.message||'Product saved';if(r.ok){e.target.reset();loadDashboard()}};
+$('sellerLogout').onclick=async()=>{await post('/seller-logout',{});loadDashboard()};loadDashboard();
+</script>
+</body>
+</html>

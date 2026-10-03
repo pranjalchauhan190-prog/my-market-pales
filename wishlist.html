@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Saved Designs - My Marketplace</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="logo.js"></script>
+</head>
+
+<body>
+
+    <header class="top-header">
+
+        <div class="logo" onclick="window.location.href='index.html'">
+
+    <div class="premium-brand">
+
+        <img
+            src="./lotus-logo.png"
+            alt="My Marketplace"
+            class="premium-lotus"
+        >
+
+        <div class="premium-brand-text">
+
+            <div class="premium-name">
+
+                <span class="premium-my">
+                    My
+                </span>
+
+                <span class="premium-marketplace">
+                    Marketplace
+                </span>
+
+            </div>
+
+            <div class="premium-line"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    </header>
+
+
+    <main class="wishlist-page">
+
+        <div class="wishlist-heading">
+            <h1>Saved Designs</h1>
+            <p>Your favourite designs and products.</p>
+        </div>
+
+        <div id="wishlistProducts" class="wishlist-grid"></div>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+    <script>
+
+        const savedProducts = (() => {
+            try {
+                const savedWishlist = localStorage.getItem("wishlist");
+                const parsedWishlist = savedWishlist ? JSON.parse(savedWishlist) : [];
+                return Array.isArray(parsedWishlist) ? parsedWishlist : [];
+            } catch (error) {
+                return [];
+            }
+        })();
+
+        const wishlistNames = savedProducts
+            .map(function(item) {
+                if (typeof item === "string") {
+                    return item.trim();
+                }
+
+                if (item && typeof item === "object") {
+                    return String(
+                        item.name || item.productName || item.title || ""
+                    ).trim();
+                }
+
+                return "";
+            })
+            .filter(Boolean);
+
+        const wishlistContainer =
+            document.getElementById("wishlistProducts");
+
+        if (wishlistNames.length === 0) {
+
+            wishlistContainer.innerHTML = `
+                <div class="empty-wishlist">
+                    <div class="empty-icon">♡</div>
+                    <h2>No Saved Designs</h2>
+                    <p>You haven't saved any products yet.</p>
+
+                    <button onclick="window.location.href='index.html'">
+                        Explore Designs
+                    </button>
+                </div>
+            `;
+
+        } else {
+
+            wishlistNames.forEach(function(name) {
+                const safeName = String(name).replace(/['\\]/g, "\\$&");
+
+                wishlistContainer.innerHTML += `
+                    <div class="wishlist-card">
+
+                        <div class="wishlist-image">
+                            <img src="product.jpg" alt="${safeName}">
+                        </div>
+
+                        <div class="wishlist-content">
+                            <h3>${safeName}</h3>
+
+                            <div class="wishlist-actions">
+    <button onclick="viewProduct('${safeName}')">
+        View Product
+    </button>
+
+    <button class="wishlist-remove"
+            onclick="removeFromWishlist('${safeName}')">
+         Remove
+    </button>
+</div>
+                        </div>
+
+                    </div>
+                `;
+
+            });
+
+        }
+
+    </script>
+
+</body>
+</html>

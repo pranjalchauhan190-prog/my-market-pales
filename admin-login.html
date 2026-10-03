@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin Login | My Marketplace</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <script src="logo.js"></script>
+
+    <style>
+
+        /* =========================================
+           PREMIUM ADMIN LOGIN PAGE
+        ========================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff8fb 0%,
+                    #fff 48%,
+                    #fdf2f7 100%
+                );
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            color: #2b2025;
+        }
+
+
+        /* =========================================
+           BRAND LOGO
+        ========================================= */
+
+        body > .logo {
+            margin-bottom: 28px;
+
+            display: flex;
+            justify-content: center;
+        }
+
+
+        /* =========================================
+           LOGIN CARD
+        ========================================= */
+
+        body > h2,
+        body > form,
+        body > #message {
+            width: 100%;
+            max-width: 430px;
+        }
+
+        body > h2 {
+            margin: 0;
+
+            padding:
+                30px
+                30px
+                10px;
+
+            background: #ffffff;
+
+            border-radius:
+                22px
+                22px
+                0
+                0;
+
+            box-shadow:
+                0 18px 45px
+                rgba(120, 60, 85, 0.10);
+
+            text-align: center;
+
+            font-size: 28px;
+            font-weight: 700;
+
+            color: #351f2a;
+        }
+
+
+        /* =========================================
+           LOGIN FORM
+        ========================================= */
+
+        body > form {
+
+            margin: 0;
+
+            padding:
+                15px
+                30px
+                30px;
+
+            background: #ffffff;
+
+            border-radius:
+                0
+                0
+                22px
+                22px;
+
+            box-shadow:
+                0 18px 45px
+                rgba(120, 60, 85, 0.10);
+        }
+
+
+        /* =========================================
+           LABELS
+        ========================================= */
+
+        body > form label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            color: #5a414b;
+        }
+
+
+        /* =========================================
+           INPUTS
+        ========================================= */
+
+        body > form input {
+
+            width: 100%;
+
+            height: 52px;
+
+            padding:
+                0
+                15px;
+
+            border:
+                1px solid
+                #ead5de;
+
+            border-radius: 12px;
+
+            outline: none;
+
+            background: #fff;
+
+            color: #30242a;
+
+            font-size: 15px;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+        }
+
+
+        body > form input:focus {
+
+            border-color: #d98aa8;
+
+            background: #fffafd;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(217, 138, 168, 0.12);
+        }
+
+
+        /* =========================================
+           REMOVE OLD BR SPACING
+        ========================================= */
+
+        body > form br {
+            display: none;
+        }
+
+
+        /* =========================================
+           INPUT GROUP SPACING
+        ========================================= */
+
+        body > form label + input {
+            margin-bottom: 20px;
+        }
+
+
+        /* =========================================
+           LOGIN BUTTON
+        ========================================= */
+
+        body > form button {
+
+            width: 100%;
+
+            height: 54px;
+
+            margin-top: 8px;
+
+            border: none;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #c86f91,
+                    #a94f73
+                );
+
+            color: #ffffff;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.3px;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 10px 24px
+                rgba(169, 79, 115, 0.22);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                filter 0.2s ease;
+        }
+
+
+        body > form button:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 14px 28px
+                rgba(169, 79, 115, 0.28);
+
+            filter:
+                brightness(1.03);
+        }
+
+
+        body > form button:active {
+
+            transform:
+                translateY(0);
+        }
+
+
+        /* =========================================
+           ERROR MESSAGE
+        ========================================= */
+
+        body > #message {
+
+            margin:
+                14px
+                0
+                0;
+
+            padding:
+                12px
+                15px;
+
+            min-height: 0;
+
+            border-radius: 10px;
+
+            text-align: center;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            color: #a13d5d;
+
+            background:
+                rgba(217, 138, 168, 0.10);
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 600px) {
+
+            body {
+                padding:
+                    25px
+                    15px;
+            }
+
+            body > h2 {
+                padding:
+                    25px
+                    20px
+                    8px;
+
+                font-size: 24px;
+            }
+
+            body > form {
+                padding:
+                    12px
+                    20px
+                    25px;
+            }
+
+            body > .logo {
+                margin-bottom: 22px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         MY MARKETPLACE LOGO
+    ========================================= -->
+
+    <div
+        class="logo"
+        onclick="window.location.href='index.html'"
+        style="cursor:pointer;"
+    >
+
+        <div class="premium-brand">
+
+            <img
+                src="./lotus-logo.png"
+                alt="My Marketplace"
+                class="premium-lotus"
+            >
+
+            <div class="premium-brand-text">
+
+                <div class="premium-name">
+
+                    <span class="premium-my">
+                        My
+                    </span>
+
+                    <span class="premium-marketplace">
+                        Marketplace
+                    </span>
+
+                </div>
+
+                <div class="premium-line"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         ADMIN LOGIN
+    ========================================= -->
+
+    <h2>
+        Admin Login
+    </h2>
+
+
+    <form
+        onsubmit="adminLogin(event)"
+    >
+
+        <label for="username">
+            Username
+        </label>
+
+        <input
+            type="text"
+            id="username"
+            autocomplete="username"
+            required
+        >
+
+
+        <label for="password">
+            Password
+        </label>
+
+        <input
+            type="password"
+            id="password"
+            autocomplete="current-password"
+            required
+        >
+
+
+        <button
+            type="submit"
+        >
+            Login to Admin Panel
+        </button>
+
+    </form>
+
+
+    <p id="message" style="margin-top: 12px; color: #7a4e5d; font-size: 13px;"></p>
+
+
+    <!-- =========================================
+         ADMIN LOGIN LOGIC
+    ========================================= -->
+
+    <script>
+
+        async function adminLogin(event) {
+
+            event.preventDefault();
+
+            const username =
+                document.getElementById(
+                    "username"
+                ).value.trim();
+
+            const password =
+                document.getElementById(
+                    "password"
+                ).value;
+
+            const messageEl = document.getElementById("message");
+
+            try {
+
+                const response = await fetch(
+                    "/admin-login",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        credentials: "same-origin",
+                        body: JSON.stringify({
+                            username,
+                            password
+                        })
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.message || "Wrong username or password"
+                    );
+                }
+
+                sessionStorage.setItem(
+                    "myMarketplaceAdminLoggedIn",
+                    "true"
+                );
+
+                window.location.href = "admin.html";
+
+            } catch (error) {
+
+                messageEl.textContent =
+                    error.message || "Wrong username or password";
+
+            }
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1853 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Marketplace | Fashion & Tailoring</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* =====================================================
+           DYNAMIC PRODUCTS
+           ===================================================== */
+
+        .dynamic-product {
+            position: relative;
+        }
+
+        .dynamic-product .product-image {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dynamic-product .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .dynamic-product-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 3;
+            padding: 6px 11px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.94);
+            color: #b84f78;
+            font-size: 11px;
+            font-weight: 700;
+            box-shadow: 0 5px 18px rgba(216, 112, 151, 0.18);
+        }
+
+        .dynamic-product .product-price {
+            font-weight: 700;
+        }
+
+        .dynamic-product-loading {
+            width: 100%;
+            padding: 30px 20px;
+            text-align: center;
+            color: #9b657b;
+            font-size: 14px;
+        }
+
+        .dynamic-product-error {
+            display: none;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            color: #9b657b;
+        }
+
+        .marketplace-filters {
+            display: grid;
+            grid-template-columns: 1.5fr repeat(5, minmax(120px, 1fr));
+            gap: 8px;
+            margin: 0 0 18px;
+        }
+
+        .marketplace-filters input,
+        .marketplace-filters select {
+            min-width: 0;
+            height: 38px;
+            border: 1px solid #eadde0;
+            border-radius: 9px;
+            background: #fffafb;
+            color: #4b3e43;
+            padding: 0 10px;
+            font-size: 11px;
+        }
+
+        @media (max-width: 900px) {
+            .marketplace-filters {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 520px) {
+            .marketplace-filters {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .marketplace-filters input {
+                grid-column: 1 / -1;
+            }
+        }
+
+        /* =====================================================
+           ADMIN PRODUCT GALLERY
+           ===================================================== */
+
+        .admin-product-gallery {
+            position: relative;
+        }
+
+        .admin-product-gallery img {
+            transition: transform 0.35s ease;
+        }
+
+        .admin-product-gallery:hover img {
+            transform: scale(1.035);
+        }
+
+        /* =====================================================
+           MOBILE
+           ===================================================== */
+
+        @media (max-width: 600px) {
+
+            .dynamic-product-badge {
+                top: 8px;
+                left: 8px;
+                padding: 5px 9px;
+                font-size: 10px;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     PREMIUM HEADER
+     ===================================================== -->
+
+<header class="top-header">
+
+    <div class="logo" onclick="goHome()">
+
+        <div class="premium-brand">
+
+            <img
+                src="./lotus-logo.png"
+                alt="My Marketplace"
+                class="premium-lotus"
+            >
+
+            <div class="premium-brand-text">
+
+                <div class="premium-name">
+
+                    <span class="premium-my">
+                        My
+                    </span>
+
+                    <span class="premium-marketplace">
+                        Marketplace
+                    </span>
+
+                </div>
+
+                <div class="premium-line"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search dresses, blouse, designs..."
+        >
+
+        <button
+            onclick="searchProducts()"
+            aria-label="Search"
+        >
+        </button>
+
+    </div>
+
+
+    <div class="header-actions">
+
+        <button
+            class="header-icon"
+            onclick="openWishlist()"
+            title="Wishlist"
+            aria-label="Wishlist"
+        >
+            ♡
+
+            <span
+                class="badge"
+                id="wishlistCount"
+            >
+                0
+            </span>
+
+        </button>
+
+
+        <button
+            class="header-icon"
+            onclick="openCart()"
+            title="Cart"
+            aria-label="Cart"
+        >
+            🛒
+
+            <span
+                class="badge"
+                id="cartCount"
+            >
+                0
+            </span>
+
+        </button>
+
+
+        <button
+            class="menu-button"
+            onclick="openMenu()"
+            title="Menu"
+            aria-label="Open Menu"
+        >
+            ☰
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     LOCATION BAR
+     ===================================================== -->
+
+<div class="location-bar">
+
+    <div class="location-left">
+
+        <span class="location-pin">
+            📍
+        </span>
+
+        <div>
+
+            <small>
+                Deliver to
+            </small>
+
+            <strong>
+                Your Location
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <button
+        class="location-change"
+        onclick="openDeliveryLocation()"
+    >
+        Change ›
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+     SIDE MENU
+     ===================================================== -->
+
+<div
+    class="side-menu"
+    id="sideMenu"
+>
+
+    <div class="side-menu-header">
+
+        <h2>
+            Menu
+        </h2>
+
+        <button
+            type="button"
+            onclick="forceCloseMenu()"
+            aria-label="Close Menu"
+        >
+            ✕
+        </button>
+
+    </div>
+
+
+    <button onclick="goHome()">
+        Home
+    </button>
+
+
+    <button onclick="window.location.href='account.html'">
+        My Account
+    </button>
+
+
+    <button onclick="window.location.href='my-orders.html'">
+        My Orders
+    </button>
+
+
+    <button onclick="repairOrder()">
+        Repair & Alteration
+    </button>
+
+
+    <button onclick="showDesigns()">
+        Design Gallery
+    </button>
+
+
+    <button onclick="openWishlist()">
+        Saved Designs
+    </button>
+
+
+    <button onclick="window.location.href='settings.html'">
+        Settings
+    </button>
+
+
+    <button
+        onclick="openLanguageSelector()"
+    >
+        Language
+    </button>
+
+
+    <button
+        onclick="openHelpSupport()"
+    >
+        Help & Support
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+     MAIN MARKETPLACE CATEGORY SECTION
+     ===================================================== -->
+
+<section class="category-section">
+
+    <div class="category-scroll">
+
+
+        <!-- WOMEN -->
+        <button
+            class="category-card active-category"
+            onclick="filterCategory('Women', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Women"
+                >
+            </div>
+
+            <span>
+                Women
+            </span>
+
+        </button>
+
+
+        <!-- MEN -->
+        <button
+            class="category-card"
+            onclick="filterCategory('Men', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Men"
+                >
+            </div>
+
+            <span>
+                Men
+            </span>
+
+        </button>
+
+
+        <!-- KIDS -->
+        <button
+            class="category-card"
+            onclick="filterCategory('Kids', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Kids"
+                >
+            </div>
+
+            <span>
+                Kids
+            </span>
+
+        </button>
+
+
+        <!-- MOBILES & TABLETS -->
+        <button
+            class="category-card"
+            onclick="filterCategory('Mobiles & Tablets', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Mobiles and Tablets"
+                >
+            </div>
+
+            <span>
+                Mobiles & Tablets
+            </span>
+
+        </button>
+
+
+        <!-- ELECTRONICS -->
+        <button
+            class="category-card"
+            onclick="filterCategory('Electronics', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Electronics"
+                >
+            </div>
+
+            <span>
+                Electronics
+            </span>
+
+        </button>
+
+
+        <!-- TVs & APPLIANCES -->
+        <button
+            class="category-card"
+            onclick="filterCategory('TVs & Appliances', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="TVs and Appliances"
+                >
+            </div>
+
+            <span>
+                TVs & Appliances
+            </span>
+
+        </button>
+
+
+        <!-- COMPUTERS & LAPTOPS -->
+        <button
+            class="category-card"
+            onclick="filterCategory('Computers & Laptops', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Computers and Laptops"
+                >
+            </div>
+
+            <span>
+                Computers & Laptops
+            </span>
+
+        </button>
+
+
+        <!-- HOME & KITCHEN -->
+        <button
+            class="category-card"
+            onclick="filterCategory('Home & Kitchen', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Home and Kitchen"
+                >
+            </div>
+
+            <span>
+                Home & Kitchen
+            </span>
+
+        </button>
+
+
+        <!-- BEAUTY -->
+        <button
+            class="category-card"
+            onclick="filterCategory('Beauty & Personal Care', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Beauty and Personal Care"
+                >
+            </div>
+
+            <span>
+                Beauty & Personal Care
+            </span>
+
+        </button>
+
+
+        <!-- GROCERY -->
+        <button
+            class="category-card"
+            onclick="filterCategory('Grocery', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Grocery"
+                >
+            </div>
+
+            <span>
+                Grocery
+            </span>
+
+        </button>
+
+
+        <!-- FURNITURE -->
+        <button
+            class="category-card"
+            onclick="filterCategory('Furniture', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Furniture"
+                >
+            </div>
+
+            <span>
+                Furniture
+            </span>
+
+        </button>
+
+
+        <!-- SPORTS -->
+        <button
+            class="category-card"
+            onclick="filterCategory('Sports & Fitness', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Sports and Fitness"
+                >
+            </div>
+
+            <span>
+                Sports & Fitness
+            </span>
+
+        </button>
+
+
+        <!-- TOYS -->
+        <button
+            class="category-card"
+            onclick="filterCategory('Toys & Games', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Toys and Games"
+                >
+            </div>
+
+            <span>
+                Toys & Games
+            </span>
+
+        </button>
+
+
+        <!-- BOOKS -->
+        <button
+            class="category-card"
+            onclick="filterCategory('Books', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Books"
+                >
+            </div>
+
+            <span>
+                Books
+            </span>
+
+        </button>
+
+
+        <!-- AUTOMOTIVE -->
+        <button
+            class="category-card"
+            onclick="filterCategory('Automotive', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Automotive"
+                >
+            </div>
+
+            <span>
+                Automotive
+            </span>
+
+        </button>
+
+
+        <!-- JEWELLERY -->
+        <button
+            class="category-card"
+            onclick="filterCategory('Jewellery & Accessories', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Jewellery and Accessories"
+                >
+            </div>
+
+            <span>
+                Jewellery & Accessories
+            </span>
+
+        </button>
+
+
+        <!-- FOOTWEAR -->
+        <button
+            class="category-card"
+            onclick="filterCategory('Footwear', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Footwear"
+                >
+            </div>
+
+            <span>
+                Footwear
+            </span>
+
+        </button>
+
+
+        <!-- BAGS -->
+        <button
+            class="category-card"
+            onclick="filterCategory('Bags & Luggage', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Bags and Luggage"
+                >
+            </div>
+
+            <span>
+                Bags & Luggage
+            </span>
+
+        </button>
+
+
+        <!-- OTHER -->
+        <button
+            class="category-card"
+            onclick="filterCategory('Other', this)"
+        >
+
+            <div class="category-card-image">
+                <img
+                    src="product.jpg"
+                    alt="Other"
+                >
+            </div>
+
+            <span>
+                Other
+            </span>
+
+        </button>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     OFFER BANNER
+     ===================================================== -->
+
+<section class="offer-section">
+
+    <div class="offer-banner">
+
+        <div class="offer-main">
+
+            <div class="offer-tag-icon">
+                🏷️
+            </div>
+
+            <div class="offer-text">
+
+                <div class="offer-title" id="offerTitle">
+                    Get <span>25% Off</span>
+                </div>
+
+                <div class="offer-subtitle" id="offerSubtitle">
+                    Up To ₹200 Off*
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="offer-coupon" aria-live="polite">
+
+            <div class="coupon-label">
+                COUPON<br>
+                CODE
+            </div>
+
+            <button id="couponCodeButton" type="button" class="coupon-code" aria-label="Copy coupon code">
+                <span id="couponCode">MYMARKETPLACE</span>
+            </button>
+
+            <button type="button" class="coupon-copy-btn" id="copyCouponButton" onclick="copyCouponCode()">Copy</button>
+
+        </div>
+
+
+        <div class="offer-terms" id="offerTerms">
+            *On your first order | T&C apply
+        </div>
+
+        <div class="coupon-copy-status" id="couponCopyStatus" aria-live="polite"></div>
+
+
+        <div class="offer-percent-icon">
+
+            <span>
+                %
+            </span>
+
+            <i>
+                ✦
+            </i>
+
+            <b>
+                ✧
+            </b>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PREMIUM TRENDING ADVERTISEMENT
+     ===================================================== -->
+
+<section
+    class="trending-hero"
+    id="trendingArea"
+>
+
+    <button
+        class="trending-arrow trending-prev"
+        type="button"
+        onclick="previousTrending()"
+        aria-label="Previous trending"
+    >
+        ‹
+    </button>
+
+
+    <div
+        class="trending-slider"
+        id="trendingSlider"
+    >
+        <!-- Banner / Shorts automatically appear here -->
+    </div>
+
+
+    <button
+        class="trending-arrow trending-next"
+        type="button"
+        onclick="nextTrending()"
+        aria-label="Next trending"
+    >
+        ›
+    </button>
+
+
+    <div
+        class="trending-dots"
+        id="trendingDots"
+    >
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PRODUCTS
+     ===================================================== -->
+
+<section
+    class="section"
+    id="shop"
+>
+
+    <div class="marketplace-filters" aria-label="Product filters">
+        <input id="advancedSearch" type="search" placeholder="Search products">
+        <select id="filterCategory"><option value="">All categories</option></select>
+        <select id="filterCondition"><option value="">Any condition</option><option>New</option><option>Used</option><option>Refurbished</option></select>
+        <select id="filterAvailability"><option value="">All stock</option><option value="available">Available</option><option value="out">Out of stock</option></select>
+        <select id="filterRating"><option value="0">Any rating</option><option value="4">4+ stars</option><option value="3">3+ stars</option></select>
+        <select id="filterSort"><option value="newest">Newest</option><option value="low">Price low to high</option><option value="high">Price high to low</option><option value="rating">Top rated</option></select>
+    </div>
+
+    <div id="products">
+
+        <div
+    id="dynamicProductsLoading"
+    class="dynamic-product-loading"
+>
+    Loading new products...
+</div>
+
+
+        <!-- =================================================
+             DYNAMIC ADMIN PRODUCTS WILL APPEAR HERE
+             ================================================= -->
+
+       
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SERVICES
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <h2>
+                Our Services
+            </h2>
+
+            <p>
+                Professional clothing services for every requirement.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-container">
+
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                ✂️
+            </div>
+
+            <h3>
+                Custom Tailoring
+            </h3>
+
+            <p>
+                Get your outfit stitched according to your measurements,
+                design and fabric.
+            </p>
+
+            <button onclick="customOrder()">
+                Explore
+            </button>
+
+        </div>
+
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                🧵
+            </div>
+
+            <h3>
+                Repair & Alteration
+            </h3>
+
+            <p>
+                Repair damaged clothes or get fitting and alteration work
+                done professionally.
+            </p>
+
+            <button onclick="repairOrder()">
+                Explore
+            </button>
+
+        </div>
+
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                👗
+            </div>
+
+            <h3>
+                Design Selection
+            </h3>
+
+            <p>
+                Explore blouse, neck, sleeve, back, lace, border and
+                other fashion designs.
+            </p>
+
+            <button onclick="showDesigns()">
+                Explore
+            </button>
+
+        </div>
+
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                📦
+            </div>
+
+            <h3>
+                Home Delivery
+            </h3>
+
+            <p>
+                Get your completed stitching and repair orders delivered
+                conveniently to your home.
+            </p>
+
+            <button onclick="deliveryInfo()">
+                Explore
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CUSTOM TAILORING
+     ===================================================== -->
+
+<section class="custom-section">
+
+    <h2>
+        Made Especially For You
+    </h2>
+
+    <p>
+        Choose a design, provide your own cloth or let us arrange
+        required materials. Custom measurements and design requirements
+        can be submitted with your order.
+    </p>
+
+    <button onclick="customOrder()">
+        Explore Custom Tailoring
+    </button>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+
+<footer>
+
+    <div class="footer-grid">
+
+
+        <div>
+
+            <h3>
+                My Marketplace
+            </h3>
+
+            <p>
+                Ladies fashion, custom tailoring,
+                repair and alteration services.
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <h3>
+                Quick Links
+            </h3>
+
+            <a href="#">
+                Home
+            </a>
+
+            <a href="my-orders.html">
+                My Orders
+            </a>
+
+            <a href="wishlist.html">
+                Saved Designs
+            </a>
+
+            <a href="#" onclick="event.preventDefault(); openHelpSupport();">
+                Help & Support
+            </a>
+
+        </div>
+
+
+        <div>
+
+            <h3>
+                Customer Support
+            </h3>
+
+            <a href="mailto:support@mymarketplace.local?subject=My%20Marketplace%20Support">
+                Contact Us
+            </a>
+
+            <a href="#" onclick="event.preventDefault(); openMarketplaceInfo('Return Policy');">
+                Return Policy
+            </a>
+
+            <a href="#" onclick="event.preventDefault(); openMarketplaceInfo('Privacy Policy');">
+                Privacy Policy
+            </a>
+
+            <a href="#" onclick="event.preventDefault(); openMarketplaceInfo('Terms & Conditions');">
+                Terms & Conditions
+            </a>
+
+        </div>
+
+
+        <div>
+
+            <h3>
+                We Accept
+            </h3>
+
+            <p>
+                🔒 Secure Payments
+            </p>
+
+            <p>
+                ↩️ Easy Returns
+            </p>
+
+            <p>
+                🚚 Home Delivery
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        © 2026 My Marketplace. All Rights Reserved.
+
+    </div>
+
+</footer>
+
+
+<!-- =====================================================
+     TOAST
+     ===================================================== -->
+
+<div
+    id="toast"
+    class="toast"
+>
+
+    <span id="toastIcon">
+        ✓
+    </span>
+
+    <div>
+
+        <strong id="toastTitle">
+            Done
+        </strong>
+
+        <p id="toastMessage">
+            Action completed successfully.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MAIN SCRIPT
+     ===================================================== -->
+
+<script src="logo.js"></script>
+<script src="script.js"></script>
+
+
+<!-- =====================================================
+     MENU FIX
+     ===================================================== -->
+
+<script>
+
+function forceCloseMenu() {
+
+    const menu =
+        document.getElementById("sideMenu");
+
+    if (!menu) return;
+
+    menu.classList.remove("show");
+
+    menu.style.right = "-350px";
+
+    document.body.style.overflow = "";
+
+    document.documentElement.style.overflow = "";
+
+}
+
+</script>
+
+
+<!-- =====================================================
+     DYNAMIC ADMIN PRODUCTS SYSTEM
+     ===================================================== -->
+
+<script>
+
+(function () {
+
+    "use strict";
+
+
+    /* =================================================
+       SAFE TEXT
+       ================================================= */
+
+    function escapeHTML(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* =================================================
+       SAFE PRODUCT ID
+       ================================================= */
+
+    function getProductId(product) {
+
+        return (
+            product.id ||
+            product._id ||
+            product.productId ||
+            product.createdAt ||
+            product.name
+        );
+
+    }
+
+
+    /* =================================================
+       CATEGORY CONVERSION
+       ================================================= */
+
+    function normalizeCategory(category) {
+
+        const value =
+            String(category || "")
+                .trim()
+                .toLowerCase();
+
+
+        if (value.includes("blouse")) {
+            return "Blouse Designs";
+        }
+
+        if (value.includes("sleeve")) {
+            return "Sleeve Designs";
+        }
+
+        if (value.includes("neck")) {
+            return "Neck Designs";
+        }
+
+        if (value.includes("back")) {
+            return "Back Designs";
+        }
+
+        if (value.includes("latkan")) {
+            return "Latkan Designs";
+        }
+
+        if (value.includes("lace")) {
+            return "Lace Designs";
+        }
+
+        if (value.includes("border")) {
+            return "Border Designs";
+        }
+
+        if (value.includes("suit")) {
+            return "Suit Designs";
+        }
+
+        if (value.includes("kurti")) {
+            return "Kurti Designs";
+        }
+
+        if (value.includes("lehenga")) {
+            return "Lehenga Designs";
+        }
+
+        if (value.includes("gown")) {
+            return "Gown Designs";
+        }
+
+        if (
+            value.includes("ready") ||
+            value.includes("ready-made") ||
+            value.includes("readymade")
+        ) {
+            return "Ready-made Clothes";
+        }
+
+
+        return category || "All";
+
+    }
+
+
+    /* =================================================
+       IMAGE GETTER
+       ================================================= */
+
+    function getProductImage(product) {
+
+        if (
+            Array.isArray(product.images) &&
+            product.images.length > 0 &&
+            product.images[0]
+        ) {
+
+            return product.images[0];
+
+        }
+
+
+        if (product.image) {
+            return product.image;
+        }
+
+
+        return "product.jpg";
+
+    }
+
+
+    /* =================================================
+       PRICE
+       ================================================= */
+
+    function formatPrice(price) {
+
+        const number =
+            Number(price || 0);
+
+        return number.toLocaleString("en-IN");
+
+    }
+
+
+    /* =================================================
+       CREATE PRODUCT CARD
+       ================================================= */
+
+    function createProductCard(product) {
+
+        const id =
+            getProductId(product);
+
+        const name =
+            product.name ||
+            product.productName ||
+            "New Product";
+
+        const category =
+            normalizeCategory(
+                product.category
+            );
+
+        const price =
+            Number(product.price || 0);
+
+        const rating = Number(product.averageRating || product.rating || 0);
+        const stock = Number(product.stock || 0);
+        const condition = product.condition || "New";
+
+        const image =
+            getProductImage(product);
+
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "product dynamic-product";
+
+        card.setAttribute(
+            "data-admin-product",
+            "true"
+        );
+
+        card.setAttribute(
+            "data-admin-product-id",
+            String(id)
+        );
+
+        card.setAttribute(
+            "data-category",
+            category
+        );
+
+        card.setAttribute(
+            "data-price",
+            String(price)
+        );
+
+        card.setAttribute(
+            "data-name",
+            name
+        );
+
+        card.setAttribute("data-rating", String(rating));
+        card.setAttribute("data-stock", String(stock));
+        card.setAttribute("data-condition", condition);
+
+
+        card.innerHTML = `
+
+            <div class="product-image admin-product-gallery">
+
+                <img
+                    src="${escapeHTML(image)}"
+                    alt="${escapeHTML(name)}"
+                    onerror="this.onerror=null;this.src='product.jpg';"
+                >
+
+                <span class="dynamic-product-badge">
+                    NEW
+                </span>
+
+                <button
+                    class="save-button"
+                    type="button"
+                    onclick="saveProduct(this)"
+                >
+                    ♡
+                </button>
+
+            </div>
+
+
+            <div class="product-content">
+
+                <span class="product-category">
+                    ${escapeHTML(category)}
+                </span>
+
+                <h3>
+                    ${escapeHTML(name)}
+                </h3>
+
+                <div class="product-price">
+                    ₹${formatPrice(price)}
+                </div>
+
+                <small>${stock > 0 ? (rating ? rating.toFixed(1) + " / 5" : "New arrival") : "Out of stock"}</small>
+
+                <button
+                    class="primary-product-button"
+                    type="button"
+                    data-product-name="${escapeHTML(name)}"
+                >
+                    View Product
+                </button>
+
+            </div>
+
+        `;
+
+
+        const viewButton =
+            card.querySelector(
+                ".primary-product-button"
+            );
+
+
+        if (viewButton) {
+
+            viewButton.addEventListener(
+                "click",
+                function () {
+
+                    if (
+                        typeof window.viewProduct ===
+                        "function"
+                    ) {
+
+                        window.viewProduct(name);
+
+                    }
+                    else {
+
+                        window.location.href =
+                            "product.html?name=" +
+                            encodeURIComponent(name);
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        return card;
+
+    }
+
+
+    /* =================================================
+       LOAD PRODUCTS
+       ================================================= */
+
+    async function loadAdminProducts() {
+
+        const container =
+            document.getElementById("products");
+
+        const loading =
+            document.getElementById(
+                "dynamicProductsLoading"
+            );
+
+
+        if (!container) {
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/products",
+                    {
+                        method: "GET",
+                        cache: "no-store"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Server returned " +
+                    response.status
+                );
+
+            }
+
+
+            const products =
+                await response.json();
+
+
+            if (!Array.isArray(products)) {
+
+                throw new Error(
+                    "Invalid products data"
+                );
+
+            }
+
+            const productSections = [
+                { key: "featured", title: "Featured Products" },
+                { key: "bestSeller", title: "Best Sellers" },
+                { key: "newArrival", title: "New Arrivals" },
+                { key: "topRated", title: "Top Rated" },
+                { key: "specialOffer", title: "Special Offers" }
+            ];
+
+            container.innerHTML = "";
+
+            const curatedProducts = products.filter(product => {
+                const visible = product.homepageVisible !== undefined ? Boolean(product.homepageVisible) : false;
+                return visible;
+            });
+
+            let hasVisibleSection = false;
+
+            productSections.forEach(function (section) {
+                const matches = curatedProducts.filter(product => Boolean(product[section.key]));
+                if (!matches.length) {
+                    return;
+                }
+
+                hasVisibleSection = true;
+
+                const sectionEl = document.createElement("section");
+                sectionEl.className = "homepage-curated-section";
+                sectionEl.innerHTML = `
+                    <div class="section-heading">
+                        <div>
+                            <h2>${escapeHTML(section.title)}</h2>
+                        </div>
+                    </div>
+                    <div class="product-grid home-curated-grid"></div>
+                `;
+
+                const grid = sectionEl.querySelector(".home-curated-grid");
+                matches.slice(0, 8).forEach(function (product) {
+                    const card = createProductCard(product);
+                    card.classList.add("home-curated-card");
+                    grid.appendChild(card);
+                });
+
+                container.appendChild(sectionEl);
+            });
+
+            if (!hasVisibleSection) {
+                const empty = document.createElement("div");
+                empty.className = "dynamic-product-empty";
+                empty.textContent = "Curated product picks will appear here once the admin enables homepage visibility.";
+                container.appendChild(empty);
+            }
+
+            if (loading) {
+                loading.remove();
+            }
+
+            setTimeout(function () {
+                if (typeof window.filterCategory === "function") {
+                    const activeCategory = document.querySelector(".active-category");
+                    if (activeCategory) {
+                        window.filterCategory("All", activeCategory);
+                    }
+                }
+            }, 100);
+
+        }
+        catch (error) {
+
+            console.error(
+                "Admin products could not be loaded:",
+                error
+            );
+
+
+            if (loading) {
+
+                loading.textContent =
+                    "Unable to load curated products.";
+
+                loading.classList.add(
+                    "dynamic-product-error"
+                );
+
+                loading.style.display =
+                    "block";
+
+            }
+
+        }
+
+    }
+
+
+    /* =================================================
+       PAGE LOAD
+       ================================================= */
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            loadAdminProducts
+        );
+
+    }
+    else {
+
+        loadAdminProducts();
+
+    }
+
+
+    /* =================================================
+       GLOBAL REFRESH FUNCTION
+       Future mein Admin se product publish hone
+       ke baad manually bhi refresh kar sakte hain.
+       ================================================= */
+
+    window.refreshAdminProducts =
+        loadAdminProducts;
+
+
+})();
+
+</script>
+
+
+<script>
+(function () {
+    const filterIds = ["advancedSearch", "filterCategory", "filterCondition", "filterAvailability", "filterRating", "filterSort"];
+    let filtersBound = false;
+
+    function applyAdvancedFilters() {
+        const search = (document.getElementById("advancedSearch")?.value || "").trim();
+        const category = document.getElementById("filterCategory")?.value || "";
+        const condition = document.getElementById("filterCondition")?.value || "";
+        const availability = document.getElementById("filterAvailability")?.value || "";
+        const rating = Number(document.getElementById("filterRating")?.value || 0);
+        const sort = document.getElementById("filterSort")?.value || "newest";
+
+        if (search || category || condition || availability || rating || sort !== "newest") {
+            const params = new URLSearchParams();
+            if (search) params.set("q", search);
+            if (category) params.set("category", category);
+            if (condition) params.set("condition", condition);
+            if (availability) params.set("availability", availability);
+            if (rating) params.set("minRating", String(rating));
+            if (sort && sort !== "newest") params.set("sort", sort);
+            if (params.toString()) {
+                window.location.href = "shop.html?" + params.toString();
+                return;
+            }
+        }
+
+        const cards = Array.from(document.querySelectorAll(".dynamic-product"));
+        const sortedCards = cards.slice().sort((a, b) => {
+            if (sort === "low") return Number(a.dataset.price) - Number(b.dataset.price);
+            if (sort === "high") return Number(b.dataset.price) - Number(a.dataset.price);
+            if (sort === "rating") return Number(b.dataset.rating) - Number(a.dataset.rating);
+            return Number(b.dataset.adminProductId) - Number(a.dataset.adminProductId);
+        });
+
+        if (sortedCards.some((card, index) => card !== cards[index])) {
+            sortedCards.forEach(card => card.parentElement?.appendChild(card));
+        }
+
+        cards.forEach(card => {
+            const matches = (!search || card.dataset.name.toLowerCase().includes(search.toLowerCase())) &&
+                (!category || card.dataset.category === category) &&
+                (!condition || card.dataset.condition === condition) &&
+                (!rating || Number(card.dataset.rating) >= rating) &&
+                (!availability || (availability === "available" ? Number(card.dataset.stock) > 0 : Number(card.dataset.stock) <= 0));
+            card.style.display = matches ? "" : "none";
+        });
+    }
+
+    function bindAdvancedFilters() {
+        const categorySelect = document.getElementById("filterCategory");
+        if (categorySelect && categorySelect.options.length === 1) {
+            [...new Set(Array.from(document.querySelectorAll(".dynamic-product")).map(card => card.dataset.category).filter(Boolean))].sort().forEach(category => {
+                categorySelect.add(new Option(category, category));
+            });
+        }
+        if (!filtersBound) {
+            filterIds.forEach(id => document.getElementById(id)?.addEventListener("input", applyAdvancedFilters));
+            filtersBound = true;
+        }
+        applyAdvancedFilters();
+    }
+
+    const productsContainer = document.getElementById("products");
+    if (productsContainer) {
+        new MutationObserver(bindAdvancedFilters).observe(productsContainer, { childList: true });
+    }
+    document.addEventListener("DOMContentLoaded", bindAdvancedFilters);
+})();
+</script>
+
+<!-- =====================================================
+     MOBILE BOTTOM NAVIGATION
+     ===================================================== -->
+
+<nav
+    class="mobile-bottom-nav"
+    aria-label="Mobile Navigation"
+>
+
+    <button
+        type="button"
+        class="mobile-nav-item active"
+        onclick="goHome()"
+    >
+
+        <span class="mobile-nav-icon">
+            ⌂
+        </span>
+
+        <span>
+            Home
+        </span>
+
+    </button>
+
+
+    <button
+        type="button"
+        class="mobile-nav-item"
+        onclick="showDesigns()"
+    >
+
+        <span class="mobile-nav-icon">
+            ✦
+        </span>
+
+        <span>
+            Categories
+        </span>
+
+    </button>
+
+
+    <button
+        type="button"
+        class="mobile-nav-item"
+        onclick="window.location.href='account.html'"
+    >
+
+        <span class="mobile-nav-icon">
+            ♙
+        </span>
+
+        <span>
+            Profile
+        </span>
+
+    </button>
+
+</nav>
+
+
+</body>
+
+</html>
